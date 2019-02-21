@@ -1,0 +1,409 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 50;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		70419CE2221CEF4B00E12011 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70419CE1221CEF4B00E12011 /* AppDelegate.swift */; };
+		70419CE4221CEF4B00E12011 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70419CE3221CEF4B00E12011 /* ViewController.swift */; };
+		70419CE7221CEF4B00E12011 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 70419CE5221CEF4B00E12011 /* Main.storyboard */; };
+		70419CE9221CEF4E00E12011 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 70419CE8221CEF4E00E12011 /* Assets.xcassets */; };
+		70419CEC221CEF4E00E12011 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 70419CEA221CEF4E00E12011 /* LaunchScreen.storyboard */; };
+		70419CFC221CEFBB00E12011 /* player_fullscreen@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 70419CF5221CEFBA00E12011 /* player_fullscreen@2x.png */; };
+		70419CFD221CEFBB00E12011 /* player_fullscreen@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 70419CF6221CEFBA00E12011 /* player_fullscreen@3x.png */; };
+		70419CFE221CEFBB00E12011 /* player_play@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 70419CF7221CEFBA00E12011 /* player_play@2x.png */; };
+		70419CFF221CEFBB00E12011 /* player_pause@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 70419CF8221CEFBA00E12011 /* player_pause@3x.png */; };
+		70419D00221CEFBB00E12011 /* slider@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 70419CF9221CEFBB00E12011 /* slider@2x.png */; };
+		70419D01221CEFBB00E12011 /* player_play@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 70419CFA221CEFBB00E12011 /* player_play@3x.png */; };
+		70419D02221CEFBB00E12011 /* player_pause@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 70419CFB221CEFBB00E12011 /* player_pause@2x.png */; };
+		70419D04221CF08600E12011 /* YTTMediaPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70419D03221CF08600E12011 /* YTTMediaPlayer.swift */; };
+		70419D06221CF49800E12011 /* YTTMediaPlayerMaskView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70419D05221CF49800E12011 /* YTTMediaPlayerMaskView.swift */; };
+		70419D0A221D4FC400E12011 /* YTTMediaPlayerTools.m in Sources */ = {isa = PBXBuildFile; fileRef = 70419D09221D4FC400E12011 /* YTTMediaPlayerTools.m */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		70419CDE221CEF4B00E12011 /* YTTPlayerDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = YTTPlayerDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		70419CE1221CEF4B00E12011 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		70419CE3221CEF4B00E12011 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		70419CE6221CEF4B00E12011 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		70419CE8221CEF4E00E12011 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		70419CEB221CEF4E00E12011 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		70419CED221CEF4E00E12011 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		70419CF5221CEFBA00E12011 /* player_fullscreen@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "player_fullscreen@2x.png"; sourceTree = "<group>"; };
+		70419CF6221CEFBA00E12011 /* player_fullscreen@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "player_fullscreen@3x.png"; sourceTree = "<group>"; };
+		70419CF7221CEFBA00E12011 /* player_play@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "player_play@2x.png"; sourceTree = "<group>"; };
+		70419CF8221CEFBA00E12011 /* player_pause@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "player_pause@3x.png"; sourceTree = "<group>"; };
+		70419CF9221CEFBB00E12011 /* slider@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "slider@2x.png"; sourceTree = "<group>"; };
+		70419CFA221CEFBB00E12011 /* player_play@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "player_play@3x.png"; sourceTree = "<group>"; };
+		70419CFB221CEFBB00E12011 /* player_pause@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "player_pause@2x.png"; sourceTree = "<group>"; };
+		70419D03221CF08600E12011 /* YTTMediaPlayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YTTMediaPlayer.swift; sourceTree = "<group>"; };
+		70419D05221CF49800E12011 /* YTTMediaPlayerMaskView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YTTMediaPlayerMaskView.swift; sourceTree = "<group>"; };
+		70419D07221D4FC400E12011 /* YTTPlayerDemo-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "YTTPlayerDemo-Bridging-Header.h"; sourceTree = "<group>"; };
+		70419D08221D4FC400E12011 /* YTTMediaPlayerTools.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = YTTMediaPlayerTools.h; sourceTree = "<group>"; };
+		70419D09221D4FC400E12011 /* YTTMediaPlayerTools.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = YTTMediaPlayerTools.m; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		70419CDB221CEF4B00E12011 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		70419CD5221CEF4B00E12011 = {
+			isa = PBXGroup;
+			children = (
+				70419CE0221CEF4B00E12011 /* YTTPlayerDemo */,
+				70419CDF221CEF4B00E12011 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		70419CDF221CEF4B00E12011 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				70419CDE221CEF4B00E12011 /* YTTPlayerDemo.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		70419CE0221CEF4B00E12011 /* YTTPlayerDemo */ = {
+			isa = PBXGroup;
+			children = (
+				70419CF3221CEF5500E12011 /* YTTPlayer */,
+				70419CE1221CEF4B00E12011 /* AppDelegate.swift */,
+				70419CE3221CEF4B00E12011 /* ViewController.swift */,
+				70419CE5221CEF4B00E12011 /* Main.storyboard */,
+				70419CE8221CEF4E00E12011 /* Assets.xcassets */,
+				70419CEA221CEF4E00E12011 /* LaunchScreen.storyboard */,
+				70419CED221CEF4E00E12011 /* Info.plist */,
+			);
+			path = YTTPlayerDemo;
+			sourceTree = "<group>";
+		};
+		70419CF3221CEF5500E12011 /* YTTPlayer */ = {
+			isa = PBXGroup;
+			children = (
+				70419CF4221CEF9900E12011 /* img */,
+				70419D03221CF08600E12011 /* YTTMediaPlayer.swift */,
+				70419D05221CF49800E12011 /* YTTMediaPlayerMaskView.swift */,
+				70419D08221D4FC400E12011 /* YTTMediaPlayerTools.h */,
+				70419D09221D4FC400E12011 /* YTTMediaPlayerTools.m */,
+				70419D07221D4FC400E12011 /* YTTPlayerDemo-Bridging-Header.h */,
+			);
+			path = YTTPlayer;
+			sourceTree = "<group>";
+		};
+		70419CF4221CEF9900E12011 /* img */ = {
+			isa = PBXGroup;
+			children = (
+				70419CF5221CEFBA00E12011 /* player_fullscreen@2x.png */,
+				70419CF6221CEFBA00E12011 /* player_fullscreen@3x.png */,
+				70419CFB221CEFBB00E12011 /* player_pause@2x.png */,
+				70419CF8221CEFBA00E12011 /* player_pause@3x.png */,
+				70419CF7221CEFBA00E12011 /* player_play@2x.png */,
+				70419CFA221CEFBB00E12011 /* player_play@3x.png */,
+				70419CF9221CEFBB00E12011 /* slider@2x.png */,
+			);
+			path = img;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		70419CDD221CEF4B00E12011 /* YTTPlayerDemo */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 70419CF0221CEF4E00E12011 /* Build configuration list for PBXNativeTarget "YTTPlayerDemo" */;
+			buildPhases = (
+				70419CDA221CEF4B00E12011 /* Sources */,
+				70419CDB221CEF4B00E12011 /* Frameworks */,
+				70419CDC221CEF4B00E12011 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = YTTPlayerDemo;
+			productName = YTTPlayerDemo;
+			productReference = 70419CDE221CEF4B00E12011 /* YTTPlayerDemo.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		70419CD6221CEF4B00E12011 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastSwiftUpdateCheck = 1010;
+				LastUpgradeCheck = 1010;
+				ORGANIZATIONNAME = AndyCuiYTT;
+				TargetAttributes = {
+					70419CDD221CEF4B00E12011 = {
+						CreatedOnToolsVersion = 10.1;
+						LastSwiftMigration = 1010;
+					};
+				};
+			};
+			buildConfigurationList = 70419CD9221CEF4B00E12011 /* Build configuration list for PBXProject "YTTPlayerDemo" */;
+			compatibilityVersion = "Xcode 9.3";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 70419CD5221CEF4B00E12011;
+			productRefGroup = 70419CDF221CEF4B00E12011 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				70419CDD221CEF4B00E12011 /* YTTPlayerDemo */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		70419CDC221CEF4B00E12011 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				70419CFD221CEFBB00E12011 /* player_fullscreen@3x.png in Resources */,
+				70419CEC221CEF4E00E12011 /* LaunchScreen.storyboard in Resources */,
+				70419CFE221CEFBB00E12011 /* player_play@2x.png in Resources */,
+				70419D01221CEFBB00E12011 /* player_play@3x.png in Resources */,
+				70419CFF221CEFBB00E12011 /* player_pause@3x.png in Resources */,
+				70419CE9221CEF4E00E12011 /* Assets.xcassets in Resources */,
+				70419D00221CEFBB00E12011 /* slider@2x.png in Resources */,
+				70419CE7221CEF4B00E12011 /* Main.storyboard in Resources */,
+				70419CFC221CEFBB00E12011 /* player_fullscreen@2x.png in Resources */,
+				70419D02221CEFBB00E12011 /* player_pause@2x.png in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		70419CDA221CEF4B00E12011 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				70419D06221CF49800E12011 /* YTTMediaPlayerMaskView.swift in Sources */,
+				70419CE4221CEF4B00E12011 /* ViewController.swift in Sources */,
+				70419D04221CF08600E12011 /* YTTMediaPlayer.swift in Sources */,
+				70419CE2221CEF4B00E12011 /* AppDelegate.swift in Sources */,
+				70419D0A221D4FC400E12011 /* YTTMediaPlayerTools.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXVariantGroup section */
+		70419CE5221CEF4B00E12011 /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				70419CE6221CEF4B00E12011 /* Base */,
+			);
+			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
+		70419CEA221CEF4E00E12011 /* LaunchScreen.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				70419CEB221CEF4E00E12011 /* Base */,
+			);
+			name = LaunchScreen.storyboard;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		70419CEE221CEF4E00E12011 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.1;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		70419CEF221CEF4E00E12011 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.1;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		70419CF1221CEF4E00E12011 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = FKX4NKH59R;
+				INFOPLIST_FILE = YTTPlayerDemo/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = AndyCuiYTT.YTTPlayerDemo;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "YTTPlayerDemo/YTTPlayer/YTTPlayerDemo-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 4.2;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		70419CF2221CEF4E00E12011 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = FKX4NKH59R;
+				INFOPLIST_FILE = YTTPlayerDemo/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = AndyCuiYTT.YTTPlayerDemo;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "YTTPlayerDemo/YTTPlayer/YTTPlayerDemo-Bridging-Header.h";
+				SWIFT_VERSION = 4.2;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		70419CD9221CEF4B00E12011 /* Build configuration list for PBXProject "YTTPlayerDemo" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				70419CEE221CEF4E00E12011 /* Debug */,
+				70419CEF221CEF4E00E12011 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		70419CF0221CEF4E00E12011 /* Build configuration list for PBXNativeTarget "YTTPlayerDemo" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				70419CF1221CEF4E00E12011 /* Debug */,
+				70419CF2221CEF4E00E12011 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 70419CD6221CEF4B00E12011 /* Project object */;
+}
