@@ -48,7 +48,7 @@ public class YTTMediaPlayer: UIView {
     private var smallFrame: CGRect = CGRect.zero
     private var bigFrame: CGRect =  CGRect(x: 0, y: 0, width: UIScreen.main.bounds.height, height: UIScreen.main.bounds.width)
     private var deviceOrientation: YTTDeviceOrientation?
-    
+    private var isDragingSlider: Bool = false
 
     private var playState: YTTPlayerState? {
         
@@ -91,9 +91,9 @@ public class YTTMediaPlayer: UIView {
         player.replaceCurrentItem(with: playerItem)
         NotificationCenter.default.addObserver(self, selector: #selector(videoPlayDidEnd(_:)), name: .AVPlayerItemDidPlayToEndTime, object: playerItem)
         playerItem?.addObserver(self, forKeyPath: "status", options: .new, context: nil)
+        playerItem?.addObserver(self, forKeyPath: "loadedTimeRanges", options: .new, context: nil)
+        playerItem?.addObserver(self, forKeyPath: "playbackBufferEmpty", options: .new, context: nil)
         player.play()
-        mask_View.playBtn.isSelected = true
-        playState = .playing
         mask_View.activity.startAnimating()
         
     }
@@ -103,6 +103,12 @@ public class YTTMediaPlayer: UIView {
         mask_View.fullScreenBtn.addTarget(self, action: #selector(enterFullScreen(_:)), for: .touchUpInside)
         // 暂停播放
         mask_View.playBtn.addTarget(self, action: #selector(playOrPauseAction(_:)), for: .touchUpInside)
+        // 开始按压滑条
+        mask_View.videoSlider.addTarget(self, action: #selector(videoSliderTouchBegan(_:)), for: .touchDown)
+        // 滑条值改变
+        mask_View.videoSlider.addTarget(self, action: #selector(videoSliderValueChanged(_:)), for: .valueChanged)
+        // 开始按压滑条
+        mask_View.videoSlider.addTarget(self, action: #selector(videoSliderTouchEnd(_:)), for: .touchUpInside)
     }
     
     private func addNotifications() {
@@ -110,13 +116,17 @@ public class YTTMediaPlayer: UIView {
         UIDevice.current.beginGeneratingDeviceOrientationNotifications()
         // 设备旋转通知
         NotificationCenter.default.addObserver(self, selector: #selector(orientationChanged(_:)), name: UIDevice.orientationDidChangeNotification, object: nil)
+        // 进入后台通知
+        NotificationCenter.default.addObserver(self, selector: #selector(appDidEnterBackground(_:)), name: UIApplication.didEnterBackgroundNotification, object: nil)
+        // 返回前台通知
+        NotificationCenter.default.addObserver(self, selector: #selector(appDidBecomeActive(_:)), name: UIApplication.didBecomeActiveNotification, object: nil)
     }
     
     /// 设置进度条与时间
     private func setProgressOfPlayTime() {
         player.addPeriodicTimeObserver(forInterval: CMTime(seconds: 1.0, preferredTimescale: 1), queue: DispatchQueue.main) { [weak self] (cmTime) in
             
-            if let item = self?.playerItem {
+            if let isDraging = self?.isDragingSlider, !isDraging, let item = self?.playerItem {
                 let currentTime = CMTimeGetSeconds(cmTime)
                 let totalTime = CMTimeGetSeconds(item.duration)
                 self?.mask_View.videoSlider.setValue(Float(currentTime / totalTime), animated: true)
@@ -129,8 +139,35 @@ public class YTTMediaPlayer: UIView {
     }
     
     public override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
-        print(change?[NSKeyValueChangeKey.newKey])
-        print(player.status.rawValue)
+        
+        if keyPath == "status" {
+            switch player.status {
+            case .unknown:
+                break
+            case .readyToPlay:
+                mask_View.playBtn.isSelected = true
+                playState = .playing
+            case .failed:
+                self.mask_View.activity.startAnimating()
+            }
+        }else if keyPath == "loadedTimeRanges" {
+            if let item = playerItem {
+                if let timeRange = item.loadedTimeRanges.first as? CMTimeRange {
+                    let loadedTime = CMTimeGetSeconds(timeRange.start) + CMTimeGetSeconds(timeRange.duration)
+                    let totalTime = CMTimeGetSeconds(item.duration)
+                    self.mask_View.progressView.setProgress(Float(loadedTime / totalTime), animated: true)
+                }
+            }
+        }else if keyPath == "loadedTimeRanges" {
+            if let item = playerItem {
+                if item.isPlaybackBufferEmpty {
+                    self.bufferingSecond()
+                }
+            }
+        }
+        
+        
+        
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -157,6 +194,64 @@ public class YTTMediaPlayer: UIView {
         YTTMediaPlayerTools.setInterfaceOrientation(sender.isSelected ? .landscapeRight : .portrait)
     }
     
+    /// 开始滑动视频滑条
+    ///
+    /// - Parameter sender: 滑条
+    @objc private func videoSliderTouchBegan(_ sender: UISlider) {
+        isDragingSlider = true
+    }
+    
+    /// 滑条值改变
+    ///
+    /// - Parameter sender: 滑条
+    @objc private func videoSliderValueChanged(_ sender: UISlider) {
+        
+        if let item = self.playerItem {
+            let currentTime = Float(CMTimeGetSeconds(item.duration)) * sender.value
+            mask_View.currentTimeLabel.text = String(format: "%02d:%02d", Int(currentTime) / 60, Int(currentTime) % 60)
+        }
+    }
+    
+    /// 结束滑动视频滑条
+    ///
+    /// - Parameter sender: 滑条
+    @objc private func videoSliderTouchEnd(_ sender: UISlider) {
+        
+        mask_View.activity.startAnimating()
+        if let item = self.playerItem {
+            let currentTime = Float(CMTimeGetSeconds(item.duration)) * sender.value
+            player.pause()
+            player.seek(to: CMTime(seconds: Double(currentTime), preferredTimescale: 1)) { (finish) in
+                if self.mask_View.progressView.progress - self.mask_View.videoSlider.value > 0.01 {
+                    self.player.play()
+                    self.playState = .playing
+                }else {
+                    self.bufferingSecond()
+                }
+            }
+        }
+        isDragingSlider = false
+    }
+    
+    
+    /// 缓存视频
+    private func bufferingSecond() {
+        self.mask_View.activity.startAnimating()
+        self.playState = .buffering
+        player.pause()
+        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 2) {
+            if self.mask_View.progressView.progress - self.mask_View.videoSlider.value > 0.01 {
+                self.player.play()
+                self.playState = .playing
+            }else {
+                self.bufferingSecond()
+            }
+        }
+    }
+    
+    
+    
+    
     /// 方向改变通知
     ///
     /// - Parameter notification: 通知消息
@@ -168,6 +263,22 @@ public class YTTMediaPlayer: UIView {
             self.frame = smallFrame
         default:
             break
+        }
+    }
+    
+    /// app 进入后台
+    ///
+    /// - Parameter notification: 通知消息
+    @objc private func appDidEnterBackground(_ notification: Notification) {
+        player.pause()
+    }
+    
+    /// app 变为活跃
+    ///
+    /// - Parameter notification: 通知消息
+    @objc private func appDidBecomeActive(_ notification: Notification) {
+        if let state = playState, state == .playing {
+            player.play()
         }
     }
     
@@ -196,6 +307,10 @@ public class YTTMediaPlayer: UIView {
         // 关闭设备方向通知
         UIDevice.current.endGeneratingDeviceOrientationNotifications()
         NotificationCenter.default.removeObserver(self)
+        playerItem?.removeObserver(self, forKeyPath: "status")
+        playerItem?.removeObserver(self, forKeyPath: "loadedTimeRanges")
+        playerItem?.removeObserver(self, forKeyPath: "playbackBufferEmpty")
+        playerItem?.removeObserver(self, forKeyPath: "playbackLikelyToKeepUp")
     }
     
     

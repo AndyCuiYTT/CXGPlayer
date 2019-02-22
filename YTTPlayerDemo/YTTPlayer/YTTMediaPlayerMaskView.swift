@@ -33,10 +33,10 @@ class YTTMediaPlayerMaskView: UIView {
     var lockBtn: UIButton?
     
     /// 音量
-    let volumeProgress: UIProgressView = UIProgressView(frame: CGRect(x: 0, y: 0, width: 100, height: 30))
+//    let volumeProgress: UIProgressView = UIProgressView(frame: CGRect(x: 0, y: 0, width: 100, height: 30))
     
     /// 菊花转
-    let activity: UIActivityIndicatorView = UIActivityIndicatorView(style: UIActivityIndicatorView.Style.white)
+    let activity: UIActivityIndicatorView = UIActivityIndicatorView(style: UIActivityIndicatorView.Style.whiteLarge)
     
     /// bottom渐变层
     let bottomGradientLayer: CAGradientLayer = CAGradientLayer()
@@ -59,7 +59,7 @@ class YTTMediaPlayerMaskView: UIView {
             
         }
         
-        setNotification()
+//        setNotification()
     }
     
     private func setSubviews() {
@@ -84,9 +84,9 @@ class YTTMediaPlayerMaskView: UIView {
         progressView.progressTintColor = UIColor(hue: 1, saturation: 1, brightness: 1, alpha: 0.3)
         progressView.trackTintColor = UIColor.clear
         
-        volumeProgress.transform = CGAffineTransform(rotationAngle: -CGFloat(Double.pi * 0.5))
-        volumeProgress.trackTintColor = UIColor(hue: 1, saturation: 1, brightness: 1, alpha: 0.3)
-        volumeProgress.progressTintColor = UIColor.clear
+//        volumeProgress.transform = CGAffineTransform(rotationAngle: -CGFloat(Double.pi * 0.5))
+//        volumeProgress.trackTintColor = UIColor(hue: 1, saturation: 1, brightness: 1, alpha: 0.3)
+//        volumeProgress.progressTintColor = UIColor.clear
         
         videoSlider.setThumbImage(UIImage(named: "slider"), for: .normal)
         videoSlider.minimumTrackTintColor = UIColor.white
@@ -102,7 +102,7 @@ class YTTMediaPlayerMaskView: UIView {
         bottomImageView.addSubview(totalTimeLabel)
         bottomImageView.addSubview(progressView)
         bottomImageView.addSubview(videoSlider)
-        self.addSubview(volumeProgress)
+//        self.addSubview(volumeProgress)
         self.addSubview(activity)
     }
     
@@ -120,16 +120,16 @@ class YTTMediaPlayerMaskView: UIView {
         topGradientLayer.locations = [0.0, 1.0]
     }
     
-    private func setNotification() {
-        NotificationCenter.default.addObserver(self, selector: #selector(volumeChanged(_:)), name: NSNotification.Name(rawValue: "AVSystemController_SystemVolumeDidChangeNotification"), object: nil)
-    }
-    
-    @objc private func volumeChanged(_ notification: Notification) {
-        if let valueStr = notification.userInfo?["AVSystemController_AudioVolumeNotificationParameter"] as? String {
-            volumeProgress.progress = Float(valueStr) ?? 0
-        }
-        
-    }
+//    private func setNotification() {
+//        NotificationCenter.default.addObserver(self, selector: #selector(volumeChanged(_:)), name: NSNotification.Name(rawValue: "AVSystemController_SystemVolumeDidChangeNotification"), object: nil)
+//    }
+//
+//    @objc private func volumeChanged(_ notification: Notification) {
+//        if let valueStr = notification.userInfo?["AVSystemController_AudioVolumeNotificationParameter"] as? String {
+//            volumeProgress.progress = Float(valueStr) ?? 0
+//        }
+//
+//    }
     
     override func layoutSubviews() {
         super.layoutSubviews()
@@ -143,13 +143,12 @@ class YTTMediaPlayerMaskView: UIView {
         
         fullScreenBtn.frame = CGRect(x: width - 50, y: 0, width: 50, height: 50)
         
-        
-        progressView.frame = CGRect(x: 0, y: 0, width: width - 220, height: 20)
+        progressView.frame = CGRect(x: 0, y: 0, width: width - 220, height: 30)
         progressView.center = CGPoint(x: width / 2, y: 25)
         totalTimeLabel.frame = CGRect(x: width - 110, y: 10, width: 60, height: 30)
         videoSlider.frame = progressView.frame
-        activity.center = CGPoint(x: width / 2, y: height / 2)
-        volumeProgress.center = CGPoint(x: 40, y: height / 2)
+        activity.frame = CGRect(x: width / 2 - 25, y: height / 2 - 25, width: 50, height: 50)
+//        volumeProgress.center = CGPoint(x: 40, y: height / 2)
         
     }
     
