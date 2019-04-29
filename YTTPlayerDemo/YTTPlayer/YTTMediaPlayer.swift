@@ -41,6 +41,8 @@ public class YTTMediaPlayer: UIView {
     
     public var videoURL: URL?
     
+    private var currentVideoName: String?
+    
     private let player: AVPlayer = AVPlayer()
     private var playerItem: AVPlayerItem?
     private var playerLayer: AVPlayerLayer!
@@ -79,20 +81,48 @@ public class YTTMediaPlayer: UIView {
         setProgressOfPlayTime()
     }
     
-    public func setVideoUrl(_ url: URL) {
+    public func setVideoUrl(_ urlStr: String) {
         playerItem?.removeObserver(self, forKeyPath: "status")
         playerItem?.removeObserver(self, forKeyPath: "loadedTimeRanges")
         playerItem?.removeObserver(self, forKeyPath: "playbackBufferEmpty")
         playerItem?.removeObserver(self, forKeyPath: "playbackLikelyToKeepUp")
+
         NotificationCenter.default.removeObserver(self, name: .AVPlayerItemDidPlayToEndTime, object: playerItem)
         playerItem = nil
         
-        playerItem = AVPlayerItem(url: url)
+        if let name = urlStr.components(separatedBy: "/").last {
+            currentVideoName = name
+        }
+        
+        
+        var asset: AVAsset?
+        if urlStr.hasPrefix("http"), let url = URL(string: urlStr) {
+            asset = AVAsset(url: url)
+        }else {
+            asset = AVAsset(url: URL(fileURLWithPath: urlStr))
+        }
+        
+        guard let ass = asset else { return }
+        
+        asset?.loadValuesAsynchronously(forKeys: ["playable"], completionHandler: {
+            DispatchQueue.main.sync {
+                self.playerItem = AVPlayerItem(asset: ass)
+            }
+        })
+        
+        if #available(iOS 9.0, *) {
+            playerItem?.canUseNetworkResourcesForLiveStreamingWhilePaused = true
+        } else {
+            // Fallback on earlier versions
+        }
+        
         player.replaceCurrentItem(with: playerItem)
         NotificationCenter.default.addObserver(self, selector: #selector(videoPlayDidEnd(_:)), name: .AVPlayerItemDidPlayToEndTime, object: playerItem)
         playerItem?.addObserver(self, forKeyPath: "status", options: .new, context: nil)
         playerItem?.addObserver(self, forKeyPath: "loadedTimeRanges", options: .new, context: nil)
         playerItem?.addObserver(self, forKeyPath: "playbackBufferEmpty", options: .new, context: nil)
+        playerItem?.addObserver(self, forKeyPath: "playbackLikelyToKeepUp", options: .new, context: nil)
+
         player.play()
         mask_View.activity.startAnimating()
         
@@ -141,29 +171,81 @@ public class YTTMediaPlayer: UIView {
     public override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
         
         if keyPath == "status" {
-            switch player.status {
-            case .unknown:
-                break
-            case .readyToPlay:
-                mask_View.playBtn.isSelected = true
-                playState = .playing
-            case .failed:
-                self.mask_View.activity.startAnimating()
+            if let item = playerItem {
+                switch item.status {
+                
+                case .readyToPlay:
+                    let currentTime = CMTimeGetSeconds(item.currentTime())
+                    let totalTime = CMTimeGetSeconds(item.duration)
+                    self.mask_View.videoSlider.setValue(Float(currentTime / totalTime), animated: true)
+                    self.mask_View.currentTimeLabel.text = String(format: "%02d:%02d", Int(currentTime) / 60, Int(currentTime) % 60)
+                    if totalTime > 0 {
+                        self.mask_View.totalTimeLabel.text = String(format: "%02d:%02d", Int(totalTime) / 60, Int(totalTime) % 60)
+                    }
+               default:
+                    self.mask_View.activity.startAnimating()
+                    self.player.pause()
+                    playState = .pause
+                }
             }
         }else if keyPath == "loadedTimeRanges" {
             if let item = playerItem {
                 if let timeRange = item.loadedTimeRanges.first as? CMTimeRange {
-                    let loadedTime = CMTimeGetSeconds(timeRange.start) + CMTimeGetSeconds(timeRange.duration)
+                    let startTime = CMTimeGetSeconds(timeRange.start)
+                    let durationTime = CMTimeGetSeconds(timeRange.duration)
+                    let loadedTime = startTime + durationTime
                     let totalTime = CMTimeGetSeconds(item.duration)
                     self.mask_View.progressView.setProgress(Float(loadedTime / totalTime), animated: true)
+                    
+                    // 缓存处理
+                    if loadedTime >= totalTime {
+                        self.mask_View.activity.stopAnimating()
+                        
+                        let mixComposition = AVMutableComposition()
+                        let audioTrack = mixComposition.addMutableTrack(withMediaType: AVMediaType.audio, preferredTrackID: kCMPersistentTrackID_Invalid)
+                        let videoTrack = mixComposition.addMutableTrack(withMediaType: AVMediaType.video, preferredTrackID: kCMPersistentTrackID_Invalid)
+                        
+                        if let assertAudioTrack = item.asset.tracks(withMediaType: AVMediaType.audio).first {
+                            try? audioTrack?.insertTimeRange(CMTimeRange(start: CMTime.zero, duration: item.asset.duration), of: assertAudioTrack, at: CMTime.zero)
+                        }
+                        
+                        if let assertVideoTrack = item.asset.tracks(withMediaType: AVMediaType.video).first {
+                            try? videoTrack?.insertTimeRange(CMTimeRange(start: CMTime.zero, duration: item.asset.duration), of: assertVideoTrack, at: CMTime.zero)
+                        }
+                        
+                        
+                        
+                        if let exporter = AVAssetExportSession(asset: mixComposition, presetName: AVAssetExportPresetPassthrough), let savePath = NSSearchPathForDirectoriesInDomains(.cachesDirectory, .userDomainMask, true).first, let name = currentVideoName {
+                            exporter.outputURL = URL(fileURLWithPath: savePath + name)
+                            print(savePath + name)
+                            exporter.outputFileType = AVFileType.mp4
+                            exporter.shouldOptimizeForNetworkUse = true
+                            exporter.exportAsynchronously {
+                                
+                            }
+                        }
+                        
+                        
+                    }
+                    
+                    
+                    
                 }
+                
+                
+                
+                
+                
             }
-        }else if keyPath == "loadedTimeRanges" {
-            if let item = playerItem {
-                if item.isPlaybackBufferEmpty {
-                    self.bufferingSecond()
-                }
-            }
+            
+        }else if keyPath == "playbackBufferEmpty" {
+            self.mask_View.activity.startAnimating()
+            self.playState = .buffering
+            player.pause()
+        }else if keyPath == "playbackLikelyToKeepUp" {
+            self.player.play()
+            self.playState = .playing
+            self.mask_View.activity.stopAnimating()
         }
         
         
@@ -208,7 +290,9 @@ public class YTTMediaPlayer: UIView {
         
         if let item = self.playerItem {
             let currentTime = Float(CMTimeGetSeconds(item.duration)) * sender.value
-            mask_View.currentTimeLabel.text = String(format: "%02d:%02d", Int(currentTime) / 60, Int(currentTime) % 60)
+            if currentTime > 0 {
+                mask_View.currentTimeLabel.text = String(format: "%02d:%02d", Int(currentTime) / 60, Int(currentTime) % 60)
+            }
         }
     }
     
@@ -222,32 +306,32 @@ public class YTTMediaPlayer: UIView {
             let currentTime = Float(CMTimeGetSeconds(item.duration)) * sender.value
             player.pause()
             player.seek(to: CMTime(seconds: Double(currentTime), preferredTimescale: 1)) { (finish) in
-                if self.mask_View.progressView.progress - self.mask_View.videoSlider.value > 0.01 {
-                    self.player.play()
-                    self.playState = .playing
-                }else {
-                    self.bufferingSecond()
-                }
+//                if self.mask_View.progressView.progress - self.mask_View.videoSlider.value > 0.01 {
+//                    self.player.play()
+//                    self.playState = .playing
+//                }else {
+//                    self.bufferingSecond()
+//                }
             }
         }
         isDragingSlider = false
     }
     
     
-    /// 缓存视频
-    private func bufferingSecond() {
-        self.mask_View.activity.startAnimating()
-        self.playState = .buffering
-        player.pause()
-        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 2) {
-            if self.mask_View.progressView.progress - self.mask_View.videoSlider.value > 0.01 {
-                self.player.play()
-                self.playState = .playing
-            }else {
-                self.bufferingSecond()
-            }
-        }
-    }
+//    /// 缓存视频
+//    private func bufferingSecond() {
+//        self.mask_View.activity.startAnimating()
+//        self.playState = .buffering
+//        player.pause()
+//        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 2) {
+//            if self.mask_View.progressView.progress - self.mask_View.videoSlider.value > 0.01 {
+//                self.player.play()
+//                self.playState = .playing
+//            }else {
+//                self.bufferingSecond()
+//            }
+//        }
+//    }
     
     
     
@@ -315,3 +399,4 @@ public class YTTMediaPlayer: UIView {
     
     
 }
+
