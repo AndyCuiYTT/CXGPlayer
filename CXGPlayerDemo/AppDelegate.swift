@@ -1,9 +1,8 @@
 //
 //  AppDelegate.swift
-//  YTTPlayerDemo
+//  CXGPlayerDemo
 //
-//  Created by qiuweniOS on 2019/2/20.
-//  Copyright © 2019 AndyCuiYTT. All rights reserved.
+//  Created by CuiXg on 2019/2/20.
 //
 
 import UIKit

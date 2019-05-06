@@ -7,6 +7,11 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		7003C9C1227E74A00027253A /* CXGMediaPlayerLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7003C9C0227E74A00027253A /* CXGMediaPlayerLoader.swift */; };
+		7003C9C3227E79240027253A /* CXGMediaPlayerDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7003C9C2227E79240027253A /* CXGMediaPlayerDelegate.swift */; };
+		7003C9C5227E7D9B0027253A /* CXGMediaPlayerRequestTask.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7003C9C4227E7D9B0027253A /* CXGMediaPlayerRequestTask.swift */; };
+		7003C9C7227E7EC10027253A /* CXGMediaPlayerFileHandle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7003C9C6227E7EC10027253A /* CXGMediaPlayerFileHandle.swift */; };
+		7003C9CF227E823E0027253A /* CXGPlayerDemoTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7003C9CE227E823E0027253A /* CXGPlayerDemoTests.swift */; };
 		70419CE2221CEF4B00E12011 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70419CE1221CEF4B00E12011 /* AppDelegate.swift */; };
 		70419CE4221CEF4B00E12011 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70419CE3221CEF4B00E12011 /* ViewController.swift */; };
 		70419CE7221CEF4B00E12011 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 70419CE5221CEF4B00E12011 /* Main.storyboard */; };
@@ -19,13 +24,30 @@
 		70419D00221CEFBB00E12011 /* slider@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 70419CF9221CEFBB00E12011 /* slider@2x.png */; };
 		70419D01221CEFBB00E12011 /* player_play@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 70419CFA221CEFBB00E12011 /* player_play@3x.png */; };
 		70419D02221CEFBB00E12011 /* player_pause@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 70419CFB221CEFBB00E12011 /* player_pause@2x.png */; };
-		70419D04221CF08600E12011 /* YTTMediaPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70419D03221CF08600E12011 /* YTTMediaPlayer.swift */; };
-		70419D06221CF49800E12011 /* YTTMediaPlayerMaskView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70419D05221CF49800E12011 /* YTTMediaPlayerMaskView.swift */; };
-		70419D0A221D4FC400E12011 /* YTTMediaPlayerTools.m in Sources */ = {isa = PBXBuildFile; fileRef = 70419D09221D4FC400E12011 /* YTTMediaPlayerTools.m */; };
+		70419D04221CF08600E12011 /* CXGMediaPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70419D03221CF08600E12011 /* CXGMediaPlayer.swift */; };
+		70419D06221CF49800E12011 /* CXGMediaPlayerMaskView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70419D05221CF49800E12011 /* CXGMediaPlayerMaskView.swift */; };
+		70419D0A221D4FC400E12011 /* CXGMediaPlayerTools.m in Sources */ = {isa = PBXBuildFile; fileRef = 70419D09221D4FC400E12011 /* CXGMediaPlayerTools.m */; };
 /* End PBXBuildFile section */
 
+/* Begin PBXContainerItemProxy section */
+		7003C9D1227E823E0027253A /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 70419CD6221CEF4B00E12011 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 70419CDD221CEF4B00E12011;
+			remoteInfo = CXGPlayerDemo;
+		};
+/* End PBXContainerItemProxy section */
+
 /* Begin PBXFileReference section */
-		70419CDE221CEF4B00E12011 /* YTTPlayerDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = YTTPlayerDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		7003C9C0227E74A00027253A /* CXGMediaPlayerLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CXGMediaPlayerLoader.swift; sourceTree = "<group>"; };
+		7003C9C2227E79240027253A /* CXGMediaPlayerDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CXGMediaPlayerDelegate.swift; sourceTree = "<group>"; };
+		7003C9C4227E7D9B0027253A /* CXGMediaPlayerRequestTask.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CXGMediaPlayerRequestTask.swift; sourceTree = "<group>"; };
+		7003C9C6227E7EC10027253A /* CXGMediaPlayerFileHandle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CXGMediaPlayerFileHandle.swift; sourceTree = "<group>"; };
+		7003C9CC227E823E0027253A /* CXGPlayerDemoTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = CXGPlayerDemoTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		7003C9CE227E823E0027253A /* CXGPlayerDemoTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CXGPlayerDemoTests.swift; sourceTree = "<group>"; };
+		7003C9D0227E823E0027253A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		70419CDE221CEF4B00E12011 /* CXGPlayerDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CXGPlayerDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		70419CE1221CEF4B00E12011 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		70419CE3221CEF4B00E12011 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		70419CE6221CEF4B00E12011 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -39,14 +61,21 @@
 		70419CF9221CEFBB00E12011 /* slider@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "slider@2x.png"; sourceTree = "<group>"; };
 		70419CFA221CEFBB00E12011 /* player_play@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "player_play@3x.png"; sourceTree = "<group>"; };
 		70419CFB221CEFBB00E12011 /* player_pause@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "player_pause@2x.png"; sourceTree = "<group>"; };
-		70419D03221CF08600E12011 /* YTTMediaPlayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YTTMediaPlayer.swift; sourceTree = "<group>"; };
-		70419D05221CF49800E12011 /* YTTMediaPlayerMaskView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YTTMediaPlayerMaskView.swift; sourceTree = "<group>"; };
-		70419D07221D4FC400E12011 /* YTTPlayerDemo-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "YTTPlayerDemo-Bridging-Header.h"; sourceTree = "<group>"; };
-		70419D08221D4FC400E12011 /* YTTMediaPlayerTools.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = YTTMediaPlayerTools.h; sourceTree = "<group>"; };
-		70419D09221D4FC400E12011 /* YTTMediaPlayerTools.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = YTTMediaPlayerTools.m; sourceTree = "<group>"; };
+		70419D03221CF08600E12011 /* CXGMediaPlayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CXGMediaPlayer.swift; sourceTree = "<group>"; };
+		70419D05221CF49800E12011 /* CXGMediaPlayerMaskView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CXGMediaPlayerMaskView.swift; sourceTree = "<group>"; };
+		70419D07221D4FC400E12011 /* CXGPlayerDemo-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "CXGPlayerDemo-Bridging-Header.h"; sourceTree = "<group>"; };
+		70419D08221D4FC400E12011 /* CXGMediaPlayerTools.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CXGMediaPlayerTools.h; sourceTree = "<group>"; };
+		70419D09221D4FC400E12011 /* CXGMediaPlayerTools.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CXGMediaPlayerTools.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		7003C9C9227E823E0027253A /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		70419CDB221CEF4B00E12011 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -57,10 +86,20 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		7003C9CD227E823E0027253A /* CXGPlayerDemoTests */ = {
+			isa = PBXGroup;
+			children = (
+				7003C9CE227E823E0027253A /* CXGPlayerDemoTests.swift */,
+				7003C9D0227E823E0027253A /* Info.plist */,
+			);
+			path = CXGPlayerDemoTests;
+			sourceTree = "<group>";
+		};
 		70419CD5221CEF4B00E12011 = {
 			isa = PBXGroup;
 			children = (
-				70419CE0221CEF4B00E12011 /* YTTPlayerDemo */,
+				70419CE0221CEF4B00E12011 /* CXGPlayerDemo */,
+				7003C9CD227E823E0027253A /* CXGPlayerDemoTests */,
 				70419CDF221CEF4B00E12011 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -68,15 +107,16 @@
 		70419CDF221CEF4B00E12011 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				70419CDE221CEF4B00E12011 /* YTTPlayerDemo.app */,
+				70419CDE221CEF4B00E12011 /* CXGPlayerDemo.app */,
+				7003C9CC227E823E0027253A /* CXGPlayerDemoTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
 		};
-		70419CE0221CEF4B00E12011 /* YTTPlayerDemo */ = {
+		70419CE0221CEF4B00E12011 /* CXGPlayerDemo */ = {
 			isa = PBXGroup;
 			children = (
-				70419CF3221CEF5500E12011 /* YTTPlayer */,
+				70419CF3221CEF5500E12011 /* CXGPlayer */,
 				70419CE1221CEF4B00E12011 /* AppDelegate.swift */,
 				70419CE3221CEF4B00E12011 /* ViewController.swift */,
 				70419CE5221CEF4B00E12011 /* Main.storyboard */,
@@ -84,20 +124,24 @@
 				70419CEA221CEF4E00E12011 /* LaunchScreen.storyboard */,
 				70419CED221CEF4E00E12011 /* Info.plist */,
 			);
-			path = YTTPlayerDemo;
+			path = CXGPlayerDemo;
 			sourceTree = "<group>";
 		};
-		70419CF3221CEF5500E12011 /* YTTPlayer */ = {
+		70419CF3221CEF5500E12011 /* CXGPlayer */ = {
 			isa = PBXGroup;
 			children = (
 				70419CF4221CEF9900E12011 /* img */,
-				70419D03221CF08600E12011 /* YTTMediaPlayer.swift */,
-				70419D05221CF49800E12011 /* YTTMediaPlayerMaskView.swift */,
-				70419D08221D4FC400E12011 /* YTTMediaPlayerTools.h */,
-				70419D09221D4FC400E12011 /* YTTMediaPlayerTools.m */,
-				70419D07221D4FC400E12011 /* YTTPlayerDemo-Bridging-Header.h */,
+				70419D03221CF08600E12011 /* CXGMediaPlayer.swift */,
+				70419D05221CF49800E12011 /* CXGMediaPlayerMaskView.swift */,
+				70419D08221D4FC400E12011 /* CXGMediaPlayerTools.h */,
+				70419D09221D4FC400E12011 /* CXGMediaPlayerTools.m */,
+				70419D07221D4FC400E12011 /* CXGPlayerDemo-Bridging-Header.h */,
+				7003C9C0227E74A00027253A /* CXGMediaPlayerLoader.swift */,
+				7003C9C2227E79240027253A /* CXGMediaPlayerDelegate.swift */,
+				7003C9C4227E7D9B0027253A /* CXGMediaPlayerRequestTask.swift */,
+				7003C9C6227E7EC10027253A /* CXGMediaPlayerFileHandle.swift */,
 			);
-			path = YTTPlayer;
+			path = CXGPlayer;
 			sourceTree = "<group>";
 		};
 		70419CF4221CEF9900E12011 /* img */ = {
@@ -117,9 +161,27 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		70419CDD221CEF4B00E12011 /* YTTPlayerDemo */ = {
+		7003C9CB227E823E0027253A /* CXGPlayerDemoTests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 70419CF0221CEF4E00E12011 /* Build configuration list for PBXNativeTarget "YTTPlayerDemo" */;
+			buildConfigurationList = 7003C9D3227E823E0027253A /* Build configuration list for PBXNativeTarget "CXGPlayerDemoTests" */;
+			buildPhases = (
+				7003C9C8227E823E0027253A /* Sources */,
+				7003C9C9227E823E0027253A /* Frameworks */,
+				7003C9CA227E823E0027253A /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				7003C9D2227E823E0027253A /* PBXTargetDependency */,
+			);
+			name = CXGPlayerDemoTests;
+			productName = CXGPlayerDemoTests;
+			productReference = 7003C9CC227E823E0027253A /* CXGPlayerDemoTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		70419CDD221CEF4B00E12011 /* CXGPlayerDemo */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 70419CF0221CEF4E00E12011 /* Build configuration list for PBXNativeTarget "CXGPlayerDemo" */;
 			buildPhases = (
 				70419CDA221CEF4B00E12011 /* Sources */,
 				70419CDB221CEF4B00E12011 /* Frameworks */,
@@ -129,9 +191,9 @@
 			);
 			dependencies = (
 			);
-			name = YTTPlayerDemo;
+			name = CXGPlayerDemo;
 			productName = YTTPlayerDemo;
-			productReference = 70419CDE221CEF4B00E12011 /* YTTPlayerDemo.app */;
+			productReference = 70419CDE221CEF4B00E12011 /* CXGPlayerDemo.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -140,17 +202,22 @@
 		70419CD6221CEF4B00E12011 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
+				CLASSPREFIX = CXG;
 				LastSwiftUpdateCheck = 1010;
 				LastUpgradeCheck = 1010;
-				ORGANIZATIONNAME = AndyCuiYTT;
+				ORGANIZATIONNAME = CuiXg;
 				TargetAttributes = {
+					7003C9CB227E823E0027253A = {
+						CreatedOnToolsVersion = 10.1;
+						TestTargetID = 70419CDD221CEF4B00E12011;
+					};
 					70419CDD221CEF4B00E12011 = {
 						CreatedOnToolsVersion = 10.1;
 						LastSwiftMigration = 1010;
 					};
 				};
 			};
-			buildConfigurationList = 70419CD9221CEF4B00E12011 /* Build configuration list for PBXProject "YTTPlayerDemo" */;
+			buildConfigurationList = 70419CD9221CEF4B00E12011 /* Build configuration list for PBXProject "CXGPlayerDemo" */;
 			compatibilityVersion = "Xcode 9.3";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
@@ -163,12 +230,20 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				70419CDD221CEF4B00E12011 /* YTTPlayerDemo */,
+				70419CDD221CEF4B00E12011 /* CXGPlayerDemo */,
+				7003C9CB227E823E0027253A /* CXGPlayerDemoTests */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		7003C9CA227E823E0027253A /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		70419CDC221CEF4B00E12011 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -189,19 +264,39 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		7003C9C8227E823E0027253A /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				7003C9CF227E823E0027253A /* CXGPlayerDemoTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		70419CDA221CEF4B00E12011 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				70419D06221CF49800E12011 /* YTTMediaPlayerMaskView.swift in Sources */,
+				70419D06221CF49800E12011 /* CXGMediaPlayerMaskView.swift in Sources */,
+				7003C9C3227E79240027253A /* CXGMediaPlayerDelegate.swift in Sources */,
 				70419CE4221CEF4B00E12011 /* ViewController.swift in Sources */,
-				70419D04221CF08600E12011 /* YTTMediaPlayer.swift in Sources */,
+				70419D04221CF08600E12011 /* CXGMediaPlayer.swift in Sources */,
+				7003C9C1227E74A00027253A /* CXGMediaPlayerLoader.swift in Sources */,
+				7003C9C5227E7D9B0027253A /* CXGMediaPlayerRequestTask.swift in Sources */,
 				70419CE2221CEF4B00E12011 /* AppDelegate.swift in Sources */,
-				70419D0A221D4FC400E12011 /* YTTMediaPlayerTools.m in Sources */,
+				7003C9C7227E7EC10027253A /* CXGMediaPlayerFileHandle.swift in Sources */,
+				70419D0A221D4FC400E12011 /* CXGMediaPlayerTools.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		7003C9D2227E823E0027253A /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 70419CDD221CEF4B00E12011 /* CXGPlayerDemo */;
+			targetProxy = 7003C9D1227E823E0027253A /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
 		70419CE5221CEF4B00E12011 /* Main.storyboard */ = {
@@ -223,6 +318,46 @@
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
+		7003C9D4227E823E0027253A /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = FKX4NKH59R;
+				INFOPLIST_FILE = CXGPlayerDemoTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = AndyCuiYTT.CXGPlayerDemoTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 4.2;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/CXGPlayerDemo.app/CXGPlayerDemo";
+			};
+			name = Debug;
+		};
+		7003C9D5227E823E0027253A /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = FKX4NKH59R;
+				INFOPLIST_FILE = CXGPlayerDemoTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = AndyCuiYTT.CXGPlayerDemoTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 4.2;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/CXGPlayerDemo.app/CXGPlayerDemo";
+			};
+			name = Release;
+		};
 		70419CEE221CEF4E00E12011 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -346,7 +481,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = FKX4NKH59R;
-				INFOPLIST_FILE = YTTPlayerDemo/Info.plist;
+				INFOPLIST_FILE = CXGPlayerDemo/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -354,7 +489,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.andy.plyer;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_OBJC_BRIDGING_HEADER = "YTTPlayerDemo/YTTPlayer/YTTPlayerDemo-Bridging-Header.h";
+				SWIFT_OBJC_BRIDGING_HEADER = "CXGPlayerDemo/CXGPlayer/CXGPlayerDemo-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -368,7 +503,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = FKX4NKH59R;
-				INFOPLIST_FILE = YTTPlayerDemo/Info.plist;
+				INFOPLIST_FILE = CXGPlayerDemo/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -376,7 +511,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.andy.plyer;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_OBJC_BRIDGING_HEADER = "YTTPlayerDemo/YTTPlayer/YTTPlayerDemo-Bridging-Header.h";
+				SWIFT_OBJC_BRIDGING_HEADER = "CXGPlayerDemo/CXGPlayer/CXGPlayerDemo-Bridging-Header.h";
 				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -385,7 +520,16 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		70419CD9221CEF4B00E12011 /* Build configuration list for PBXProject "YTTPlayerDemo" */ = {
+		7003C9D3227E823E0027253A /* Build configuration list for PBXNativeTarget "CXGPlayerDemoTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				7003C9D4227E823E0027253A /* Debug */,
+				7003C9D5227E823E0027253A /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		70419CD9221CEF4B00E12011 /* Build configuration list for PBXProject "CXGPlayerDemo" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				70419CEE221CEF4E00E12011 /* Debug */,
@@ -394,7 +538,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		70419CF0221CEF4E00E12011 /* Build configuration list for PBXNativeTarget "YTTPlayerDemo" */ = {
+		70419CF0221CEF4E00E12011 /* Build configuration list for PBXNativeTarget "CXGPlayerDemo" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				70419CF1221CEF4E00E12011 /* Debug */,

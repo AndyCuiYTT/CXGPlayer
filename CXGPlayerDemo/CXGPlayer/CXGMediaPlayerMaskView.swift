@@ -1,15 +1,15 @@
 //
-//  YTTMediaPlayerMaskView.swift
-//  YTTPlayerDemo
+//  CXGMediaPlayerMaskView.swift
+//  CXGPlayerDemo
 //
-//  Created by qiuweniOS on 2019/2/20.
-//  Copyright © 2019 AndyCuiYTT. All rights reserved.
+//  Created by CuiXg on 2019/2/20.
+//  Copyright © 2019 CuiXg. All rights reserved.
 //
 
 import UIKit
 import AVFoundation
 
-class YTTMediaPlayerMaskView: UIView {
+class CXGMediaPlayerMaskView: UIView {
 
     /// 播放按钮
     let playBtn: UIButton = UIButton(type: .custom)

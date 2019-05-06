@@ -1,23 +1,23 @@
 
 //
-//  YTTMediaPlayer.swift
-//  YTTPlayer
+//  CXGMediaPlayer.swift
+//  CXGPlayer
 //
-//  Created by qiuweniOS on 2019/2/20.
-//  Copyright © 2019 AndyCuiYTT. All rights reserved.
+//  Created by CuiXg on 2019/2/20.
+//  Copyright © 2019 CuiXg. All rights reserved.
 //
 
 import UIKit
 import AVFoundation
 
 // 视频横竖屏
-public enum YTTDeviceOrientation {
+public enum CXGDeviceOrientation {
     case horizontal // 横向
     case vertical // 竖向
 }
 
 // 播放器状态
-public enum YTTPlayerState {
+public enum CXGPlayerState {
     case buffering // 缓冲
     case playing // 播放中
     case stopped // 停止播放
@@ -26,7 +26,7 @@ public enum YTTPlayerState {
 }
 
 
-public class YTTMediaPlayer: UIView {
+public class CXGMediaPlayer: UIView {
     
     var videoURLStr: String? {
         get {
@@ -41,18 +41,17 @@ public class YTTMediaPlayer: UIView {
     
     public var videoURL: URL?
     
-    private var currentVideoName: String?
-    
     private let player: AVPlayer = AVPlayer()
     private var playerItem: AVPlayerItem?
     private var playerLayer: AVPlayerLayer!
-    private var mask_View: YTTMediaPlayerMaskView!
+    private var mask_View: CXGMediaPlayerMaskView!
     private var smallFrame: CGRect = CGRect.zero
     private var bigFrame: CGRect =  CGRect(x: 0, y: 0, width: UIScreen.main.bounds.height, height: UIScreen.main.bounds.width)
-    private var deviceOrientation: YTTDeviceOrientation?
+    private var deviceOrientation: CXGDeviceOrientation?
     private var isDragingSlider: Bool = false
+    private let playerLoader: CXGMediaPlayerLoader = CXGMediaPlayerLoader()
 
-    private var playState: YTTPlayerState? {
+    private var playState: CXGPlayerState? {
         
         willSet {
             
@@ -73,7 +72,7 @@ public class YTTMediaPlayer: UIView {
         playerLayer.videoGravity = .resizeAspectFill
         self.layer.insertSublayer(playerLayer, at: 0)
         
-        mask_View = YTTMediaPlayerMaskView(frame: CGRect(x: 0, y: 0, width: frame.width, height: frame.height))
+        mask_View = CXGMediaPlayerMaskView(frame: CGRect(x: 0, y: 0, width: frame.width, height: frame.height))
         self.addSubview(mask_View)
         
         addTargets()
@@ -90,28 +89,21 @@ public class YTTMediaPlayer: UIView {
         NotificationCenter.default.removeObserver(self, name: .AVPlayerItemDidPlayToEndTime, object: playerItem)
         playerItem = nil
         
-        if let name = urlStr.components(separatedBy: "/").last {
-            currentVideoName = name
+        guard var url = URL(string: urlStr) else {
+            return
         }
         
-        
-        var asset: AVAsset?
-        if urlStr.hasPrefix("http"), let url = URL(string: urlStr) {
-            asset = AVAsset(url: url)
-        }else {
-            asset = AVAsset(url: URL(fileURLWithPath: urlStr))
+        var urlComponents = URLComponents(url: url, resolvingAgainstBaseURL: false)
+        urlComponents?.scheme = "streaming"
+        if let u = urlComponents?.url {
+            url = u
         }
         
-        guard let ass = asset else { return }
-        
-        asset?.loadValuesAsynchronously(forKeys: ["playable"], completionHandler: {
-            DispatchQueue.main.sync {
-                self.playerItem = AVPlayerItem(asset: ass)
-            }
-        })
-        
+        let asset = AVURLAsset(url: url, options: nil)
+        asset.resourceLoader.setDelegate(playerLoader, queue: DispatchQueue.main)
+        self.playerItem = AVPlayerItem(asset: asset)
         if #available(iOS 9.0, *) {
-            playerItem?.canUseNetworkResourcesForLiveStreamingWhilePaused = true
+//            playerItem?.canUseNetworkResourcesForLiveStreamingWhilePaused = true
         } else {
             // Fallback on earlier versions
         }
@@ -122,11 +114,13 @@ public class YTTMediaPlayer: UIView {
         playerItem?.addObserver(self, forKeyPath: "loadedTimeRanges", options: .new, context: nil)
         playerItem?.addObserver(self, forKeyPath: "playbackBufferEmpty", options: .new, context: nil)
         playerItem?.addObserver(self, forKeyPath: "playbackLikelyToKeepUp", options: .new, context: nil)
-
+        
         player.play()
         mask_View.activity.startAnimating()
         
+        
     }
+ 
     
     private func addTargets() {
         // 全屏事件
@@ -197,61 +191,26 @@ public class YTTMediaPlayer: UIView {
                     let totalTime = CMTimeGetSeconds(item.duration)
                     self.mask_View.progressView.setProgress(Float(loadedTime / totalTime), animated: true)
                     
-                    // 缓存处理
-                    if loadedTime >= totalTime {
-                        self.mask_View.activity.stopAnimating()
-                        
-                        let mixComposition = AVMutableComposition()
-                        let audioTrack = mixComposition.addMutableTrack(withMediaType: AVMediaType.audio, preferredTrackID: kCMPersistentTrackID_Invalid)
-                        let videoTrack = mixComposition.addMutableTrack(withMediaType: AVMediaType.video, preferredTrackID: kCMPersistentTrackID_Invalid)
-                        
-                        if let assertAudioTrack = item.asset.tracks(withMediaType: AVMediaType.audio).first {
-                            try? audioTrack?.insertTimeRange(CMTimeRange(start: CMTime.zero, duration: item.asset.duration), of: assertAudioTrack, at: CMTime.zero)
-                        }
-                        
-                        if let assertVideoTrack = item.asset.tracks(withMediaType: AVMediaType.video).first {
-                            try? videoTrack?.insertTimeRange(CMTimeRange(start: CMTime.zero, duration: item.asset.duration), of: assertVideoTrack, at: CMTime.zero)
-                        }
-                        
-                        
-                        
-                        if let exporter = AVAssetExportSession(asset: mixComposition, presetName: AVAssetExportPresetPassthrough), let savePath = NSSearchPathForDirectoriesInDomains(.cachesDirectory, .userDomainMask, true).first, let name = currentVideoName {
-                            exporter.outputURL = URL(fileURLWithPath: savePath + name)
-                            print(savePath + name)
-                            exporter.outputFileType = AVFileType.mp4
-                            exporter.shouldOptimizeForNetworkUse = true
-                            exporter.exportAsynchronously {
-                                
-                            }
-                        }
-                        
-                        
-                    }
-                    
-                    
-                    
                 }
-                
-                
-                
-                
-                
             }
             
         }else if keyPath == "playbackBufferEmpty" {
             self.mask_View.activity.startAnimating()
             self.playState = .buffering
             player.pause()
+            mask_View.playBtn.isSelected = false
         }else if keyPath == "playbackLikelyToKeepUp" {
             self.player.play()
             self.playState = .playing
             self.mask_View.activity.stopAnimating()
+            mask_View.playBtn.isSelected = true
         }
         
         
         
     }
     
+ 
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
@@ -273,7 +232,7 @@ public class YTTMediaPlayer: UIView {
     // 进入全屏
     @objc private func enterFullScreen(_ sender: UIButton) {
         sender.isSelected = !sender.isSelected
-        YTTMediaPlayerTools.setInterfaceOrientation(sender.isSelected ? .landscapeRight : .portrait)
+        CXGMediaPlayerTools.setInterfaceOrientation(sender.isSelected ? .landscapeRight : .portrait)
     }
     
     /// 开始滑动视频滑条
@@ -305,6 +264,7 @@ public class YTTMediaPlayer: UIView {
         if let item = self.playerItem {
             let currentTime = Float(CMTimeGetSeconds(item.duration)) * sender.value
             player.pause()
+            
             player.seek(to: CMTime(seconds: Double(currentTime), preferredTimescale: 1)) { (finish) in
 //                if self.mask_View.progressView.progress - self.mask_View.videoSlider.value > 0.01 {
 //                    self.player.play()
