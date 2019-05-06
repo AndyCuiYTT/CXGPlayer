@@ -41,10 +41,10 @@ class CXGMediaPlayerFileHandle: NSObject {
     ///   - offset: 文件便宜位置
     ///   - length: 读取数据长度
     /// - Returns: 读取到的文件
-    class func readTempFileData(withOffset offset: UInt64, length: Int) -> Data? {
+    class func readTempFileData(withOffset offset: Int64, length: Int) -> Data? {
         let handle = FileHandle(forReadingAtPath: tempFilePath)
         // 设置文件的偏移位置
-        handle?.seek(toFileOffset: offset)
+        handle?.seek(toFileOffset: UInt64(offset))
         // 读取文件中一定长度的内容
         // UTF8编码汉字占3个字节 swift语言中汉字字符占1个字节
         return handle?.readData(ofLength: length)
@@ -78,6 +78,7 @@ class CXGMediaPlayerFileHandle: NSObject {
         }
         return nil
     }
+   
     
 }
 

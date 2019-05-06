@@ -17,8 +17,9 @@ class ViewController: UIViewController {
 
         let player = CXGMediaPlayer(frame: CGRect(x: 0, y: 20, width: UIScreen.main.bounds.width, height: 300))
         
-        player.setVideoUrl("https://media.w3.org/2010/05/bunny/movie.mp4")
-        
+//        player.setVideoUrl("https://media.w3.org/2010/05/bunny/movie.mp4")
+
+        player.setVideoUrl("https://media.w3.org/2010/04/html5-meetup-paris-avril-2010.mp4")
 //        player.setVideoUrl("http://download.lingyongqian.cn/music/AdagioSostenuto.mp3")
         
         self.view.addSubview(player)

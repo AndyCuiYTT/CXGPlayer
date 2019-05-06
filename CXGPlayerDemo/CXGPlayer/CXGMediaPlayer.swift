@@ -93,19 +93,19 @@ public class CXGMediaPlayer: UIView {
             return
         }
         
-        var urlComponents = URLComponents(url: url, resolvingAgainstBaseURL: false)
-        urlComponents?.scheme = "streaming"
-        if let u = urlComponents?.url {
-            url = u
-        }
         
-        let asset = AVURLAsset(url: url, options: nil)
-        asset.resourceLoader.setDelegate(playerLoader, queue: DispatchQueue.main)
-        self.playerItem = AVPlayerItem(asset: asset)
-        if #available(iOS 9.0, *) {
-//            playerItem?.canUseNetworkResourcesForLiveStreamingWhilePaused = true
+        /// 判断是否有缓存文件
+        if let path = CXGMediaPlayerFileHandle.cacheFilePath(withURL: url) {
+            self.playerItem = AVPlayerItem(url: URL(fileURLWithPath: path))
         } else {
-            // Fallback on earlier versions
+            var urlComponents = URLComponents(url: url, resolvingAgainstBaseURL: false)
+            urlComponents?.scheme = "streaming"
+            if let u = urlComponents?.url {
+                url = u
+            }
+            let asset = AVURLAsset(url: url, options: nil)
+            asset.resourceLoader.setDelegate(playerLoader, queue: DispatchQueue.main)
+            self.playerItem = AVPlayerItem(asset: asset)
         }
         
         player.replaceCurrentItem(with: playerItem)
@@ -190,7 +190,6 @@ public class CXGMediaPlayer: UIView {
                     let loadedTime = startTime + durationTime
                     let totalTime = CMTimeGetSeconds(item.duration)
                     self.mask_View.progressView.setProgress(Float(loadedTime / totalTime), animated: true)
-                    
                 }
             }
             
@@ -266,12 +265,8 @@ public class CXGMediaPlayer: UIView {
             player.pause()
             
             player.seek(to: CMTime(seconds: Double(currentTime), preferredTimescale: 1)) { (finish) in
-//                if self.mask_View.progressView.progress - self.mask_View.videoSlider.value > 0.01 {
-//                    self.player.play()
-//                    self.playState = .playing
-//                }else {
-//                    self.bufferingSecond()
-//                }
+                    self.player.play()
+                    self.playState = .playing
             }
         }
         isDragingSlider = false

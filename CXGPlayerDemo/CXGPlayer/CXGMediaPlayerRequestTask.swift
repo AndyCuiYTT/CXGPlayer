@@ -9,7 +9,9 @@
 import UIKit
 
 protocol CXGMediaPlayerRequestTaskDelegate {
-   func requestTaskDidUpdateCache()
+    func requestTaskDidUpdateCache()
+    
+    func downloadProgress(_ progress: Float)
 }
 
 class CXGMediaPlayerRequestTask: NSObject {

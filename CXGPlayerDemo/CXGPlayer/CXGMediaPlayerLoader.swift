@@ -52,7 +52,7 @@ extension CXGMediaPlayerLoader {
                 if loadingOffset >= requestOffset  && loadingOffset <= requestCachLength + requestOffset {
                     processRequestList()
                 }else {
-                    
+//                    newTaskWithLoadingRequest(loadingRequest, cache: false)
                 }
             }
             
@@ -110,16 +110,15 @@ extension CXGMediaPlayerLoader {
         if dataRequest.currentOffset != 0 {
             requestedOffset = dataRequest.currentOffset
         }
-        let canReadLength = cacheLength - (requestedOffset - task.requestOffset);
+        let canReadLength = cacheLength - requestedOffset
         
         let respondLength = Int(canReadLength) < dataRequest.requestedLength ? Int(canReadLength) :  dataRequest.requestedLength
         
         print("cacheLength \(cacheLength), requestedOffset \(requestedOffset), currentOffset \(dataRequest.currentOffset), canReadLength \(canReadLength), requestedLength \(dataRequest.requestedLength)");
         
-        loadingRequest.dataRequest?.respond(with: CXGMediaPlayerFileHandle.readTempFileData(withOffset: UInt64(requestedOffset - task.requestOffset), length: respondLength) ?? Data())
+        loadingRequest.dataRequest?.respond(with: CXGMediaPlayerFileHandle.readTempFileData(withOffset: requestedOffset, length: respondLength) ?? Data())
         
-        
-        
+                
         //如果完全响应了所需要的数据，则完成
         let nowendOffset = requestedOffset + canReadLength;
         let reqEndOffset = dataRequest.requestedOffset + Int64(dataRequest.requestedLength);
