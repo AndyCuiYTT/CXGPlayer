@@ -67,7 +67,7 @@ public class CXGMediaPlayer: UIView {
     public override init(frame: CGRect) {
         super.init(frame: frame)
         smallFrame = frame
-        
+        playerLoader.delegate = self
         playerLayer = AVPlayerLayer(player: player)
         playerLayer.videoGravity = .resizeAspectFill
         self.layer.insertSublayer(playerLayer, at: 0)
@@ -83,8 +83,8 @@ public class CXGMediaPlayer: UIView {
     public func setVideoUrl(_ urlStr: String) {
         playerItem?.removeObserver(self, forKeyPath: "status")
         playerItem?.removeObserver(self, forKeyPath: "loadedTimeRanges")
-        playerItem?.removeObserver(self, forKeyPath: "playbackBufferEmpty")
-        playerItem?.removeObserver(self, forKeyPath: "playbackLikelyToKeepUp")
+//        playerItem?.removeObserver(self, forKeyPath: "playbackBufferEmpty")
+//        playerItem?.removeObserver(self, forKeyPath: "playbackLikelyToKeepUp")
 
         NotificationCenter.default.removeObserver(self, name: .AVPlayerItemDidPlayToEndTime, object: playerItem)
         playerItem = nil
@@ -97,6 +97,7 @@ public class CXGMediaPlayer: UIView {
         /// 判断是否有缓存文件
         if let path = CXGMediaPlayerFileHandle.cacheFilePath(withURL: url) {
             self.playerItem = AVPlayerItem(url: URL(fileURLWithPath: path))
+            playerItem?.addObserver(self, forKeyPath: "loadedTimeRanges", options: .new, context: nil)
         } else {
             var urlComponents = URLComponents(url: url, resolvingAgainstBaseURL: false)
             urlComponents?.scheme = "streaming"
@@ -111,11 +112,10 @@ public class CXGMediaPlayer: UIView {
         player.replaceCurrentItem(with: playerItem)
         NotificationCenter.default.addObserver(self, selector: #selector(videoPlayDidEnd(_:)), name: .AVPlayerItemDidPlayToEndTime, object: playerItem)
         playerItem?.addObserver(self, forKeyPath: "status", options: .new, context: nil)
-        playerItem?.addObserver(self, forKeyPath: "loadedTimeRanges", options: .new, context: nil)
-        playerItem?.addObserver(self, forKeyPath: "playbackBufferEmpty", options: .new, context: nil)
-        playerItem?.addObserver(self, forKeyPath: "playbackLikelyToKeepUp", options: .new, context: nil)
+//        playerItem?.addObserver(self, forKeyPath: "playbackBufferEmpty", options: .new, context: nil)
+//        playerItem?.addObserver(self, forKeyPath: "playbackLikelyToKeepUp", options: .new, context: nil)
         
-        player.play()
+//        player.play()
         mask_View.activity.startAnimating()
         
         
@@ -176,10 +176,16 @@ public class CXGMediaPlayer: UIView {
                     if totalTime > 0 {
                         self.mask_View.totalTimeLabel.text = String(format: "%02d:%02d", Int(totalTime) / 60, Int(totalTime) % 60)
                     }
-               default:
-                    self.mask_View.activity.startAnimating()
-                    self.player.pause()
-                    playState = .pause
+                    player.play()
+                    self.playState = .playing
+                    self.mask_View.activity.stopAnimating()
+                    mask_View.playBtn.isSelected = true
+                case .failed:
+                    self.mask_View.activity.stopAnimating()
+                    print("load error")
+                    break
+                case .unknown:
+                    break
                 }
             }
         }else if keyPath == "loadedTimeRanges" {
@@ -193,17 +199,18 @@ public class CXGMediaPlayer: UIView {
                 }
             }
             
-        }else if keyPath == "playbackBufferEmpty" {
-            self.mask_View.activity.startAnimating()
-            self.playState = .buffering
-            player.pause()
-            mask_View.playBtn.isSelected = false
-        }else if keyPath == "playbackLikelyToKeepUp" {
-            self.player.play()
-            self.playState = .playing
-            self.mask_View.activity.stopAnimating()
-            mask_View.playBtn.isSelected = true
         }
+//        else if keyPath == "playbackBufferEmpty" {
+//            self.mask_View.activity.startAnimating()
+//            self.playState = .buffering
+//            player.pause()
+//            mask_View.playBtn.isSelected = false
+//        }else if keyPath == "playbackLikelyToKeepUp" {
+//            self.player.play()
+//            self.playState = .playing
+//            self.mask_View.activity.stopAnimating()
+//            mask_View.playBtn.isSelected = true
+//        }
         
         
         
@@ -259,37 +266,18 @@ public class CXGMediaPlayer: UIView {
     /// - Parameter sender: 滑条
     @objc private func videoSliderTouchEnd(_ sender: UISlider) {
         
-        mask_View.activity.startAnimating()
         if let item = self.playerItem {
             let currentTime = Float(CMTimeGetSeconds(item.duration)) * sender.value
             player.pause()
             
             player.seek(to: CMTime(seconds: Double(currentTime), preferredTimescale: 1)) { (finish) in
                     self.player.play()
-                    self.playState = .playing
+//                    self.playState = .playing
             }
         }
         isDragingSlider = false
     }
-    
-    
-//    /// 缓存视频
-//    private func bufferingSecond() {
-//        self.mask_View.activity.startAnimating()
-//        self.playState = .buffering
-//        player.pause()
-//        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 2) {
-//            if self.mask_View.progressView.progress - self.mask_View.videoSlider.value > 0.01 {
-//                self.player.play()
-//                self.playState = .playing
-//            }else {
-//                self.bufferingSecond()
-//            }
-//        }
-//    }
-    
-    
-    
+        
     
     /// 方向改变通知
     ///
@@ -348,8 +336,34 @@ public class CXGMediaPlayer: UIView {
         NotificationCenter.default.removeObserver(self)
         playerItem?.removeObserver(self, forKeyPath: "status")
         playerItem?.removeObserver(self, forKeyPath: "loadedTimeRanges")
-        playerItem?.removeObserver(self, forKeyPath: "playbackBufferEmpty")
-        playerItem?.removeObserver(self, forKeyPath: "playbackLikelyToKeepUp")
+//        playerItem?.removeObserver(self, forKeyPath: "playbackBufferEmpty")
+//        playerItem?.removeObserver(self, forKeyPath: "playbackLikelyToKeepUp")
+    }
+    
+    
+}
+
+extension CXGMediaPlayer: CXGMediaPlayerLoaderDelegate {
+    func loaderWaitingForLoadCache() {
+        self.mask_View.activity.startAnimating()
+        self.playState = .buffering
+        player.pause()
+        mask_View.playBtn.isSelected = false
+    }
+    
+    func loaderCacheEnoughToPlay() {
+        self.player.play()
+        self.playState = .playing
+        self.mask_View.activity.stopAnimating()
+        mask_View.playBtn.isSelected = true
+    }
+    
+    func loaderCacheProgress(_ progress: Float) {
+        self.mask_View.progressView.setProgress(progress, animated: true)
+    }
+    
+    func loaderRequestFailWithError(_ error: Error) {
+        
     }
     
     

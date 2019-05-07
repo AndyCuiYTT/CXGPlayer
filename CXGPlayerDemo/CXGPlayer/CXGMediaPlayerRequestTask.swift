@@ -8,10 +8,22 @@
 
 import UIKit
 
+// MARK: - 数据请求代理
 protocol CXGMediaPlayerRequestTaskDelegate {
+    
+    /// 刷新加载数据
     func requestTaskDidUpdateCache()
     
-    func downloadProgress(_ progress: Float)
+    /// 缓存加载完成
+    func requestTaskDidFinishLoadCache()
+    
+    /// 下载进度
+    ///
+    /// - Parameter progress: 进度
+    func requestTaskDownloadProgress(_ progress: Float)
+    
+    /// 刷新加载数据
+    func requestTaskDidFailWithError(_ error: Error)
 }
 
 class CXGMediaPlayerRequestTask: NSObject {
@@ -20,9 +32,17 @@ class CXGMediaPlayerRequestTask: NSObject {
     private var dataTask: URLSessionDataTask?
     
     var requestURL: URL?
+    
+    /// 加载初始位置
     var requestOffset: Int64 = 0
+    
+    /// 文件大小
     var fileLength: Int64 = 0
+    
+    /// 已缓存数据大小
     var cacheLength: Int64 = 0
+    
+    /// 是否需要缓存,仅对在头开始的缓存
     var cache: Bool = false
     private var cancel: Bool = false
     var delegate: CXGMediaPlayerRequestTaskDelegate?
@@ -86,6 +106,7 @@ extension CXGMediaPlayerRequestTask: URLSessionDataDelegate {
         CXGMediaPlayerFileHandle.writeToTempFile(withData: data)
         self.cacheLength += Int64(data.count)
         self.delegate?.requestTaskDidUpdateCache()
+        self.delegate?.requestTaskDownloadProgress(Float(self.cacheLength) / Float(self.fileLength))
     }
     
     func urlSession(_ session: URLSession, task: URLSessionTask, didCompleteWithError error: Error?) {
@@ -95,7 +116,10 @@ extension CXGMediaPlayerRequestTask: URLSessionDataDelegate {
         if error == nil, let fileName = self.requestURL?.path.components(separatedBy: "/").last {
             if cache {
                 try? CXGMediaPlayerFileHandle.cacheTempFile(withFileName: fileName)
+                delegate?.requestTaskDidFinishLoadCache()
             }
+        }else {
+            delegate?.requestTaskDidFailWithError(error!)
         }
     }
     
