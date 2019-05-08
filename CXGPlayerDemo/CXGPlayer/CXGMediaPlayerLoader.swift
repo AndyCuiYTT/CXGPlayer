@@ -48,7 +48,8 @@ class CXGMediaPlayerLoader: NSObject {
     var delegate: CXGMediaPlayerLoaderDelegate?
     
     private var isCacheEnoughToPlay: Bool = false
-
+    
+    var isSeekRequired: Bool = false
 
 }
 
@@ -73,29 +74,38 @@ extension CXGMediaPlayerLoader: AVAssetResourceLoaderDelegate {
 extension CXGMediaPlayerLoader {
     
     func addLoadingRequest(_ loadingRequest: AVAssetResourceLoadingRequest) {
-        requestList.append(loadingRequest)
+       
         if self.requestTask != nil {
             if let loadingOffset = loadingRequest.dataRequest?.requestedOffset, let taskCachLength = self.requestTask?.cacheLength, let taskOffset = self.requestTask?.requestOffset {
                 // 判断是否有缓存可供播放,有则回填数据
-                if loadingOffset - taskOffset < taskCachLength {
+                if loadingOffset > taskOffset && loadingOffset - taskOffset < taskCachLength {
                     if !isCacheEnoughToPlay {
                         delegate?.loaderCacheEnoughToPlay()
                         isCacheEnoughToPlay = true
                     }
+                    requestList.append(loadingRequest)
                     processRequestList()
                 }else {
-                    if isCacheEnoughToPlay {
-                        delegate?.loaderWaitingForLoadCache()
-                        isCacheEnoughToPlay = false
+                    
+                    if isSeekRequired {
+                        requestList.removeAll()
+                        requestList.append(loadingRequest)
+                        newTaskWithLoadingRequest(loadingRequest, cache: false)
+                    }else {
+                        if isCacheEnoughToPlay {
+                            delegate?.loaderWaitingForLoadCache()
+                            isCacheEnoughToPlay = false
+                        }
+                        requestList.append(loadingRequest)
                     }
-//                    newTaskWithLoadingRequest(loadingRequest, cache: false)
                 }
             }
             
         }else {
+            requestList.removeAll()
+            requestList.append(loadingRequest)
             newTaskWithLoadingRequest(loadingRequest, cache: true)
         }
-        
     }
     
     func newTaskWithLoadingRequest(_ loadingRequest: AVAssetResourceLoadingRequest, cache: Bool) {
@@ -107,12 +117,14 @@ extension CXGMediaPlayerLoader {
         self.requestTask = CXGMediaPlayerRequestTask()
         self.requestTask?.requestURL = loadingRequest.request.url
         self.requestTask?.requestOffset = loadingRequest.dataRequest?.requestedOffset ?? 0;
+        self.requestTask?.cacheLength = 0
         self.requestTask?.cache = cache;
         if (fileLength > 0) {
             self.requestTask?.fileLength = Int64(fileLength);
         }
         self.requestTask?.delegate = self
         self.requestTask?.start()
+        isSeekRequired = false
     }
     
     
