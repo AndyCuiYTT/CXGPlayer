@@ -62,6 +62,7 @@ class CXGMediaPlayerRequestTask: NSObject {
         }
         
         var request = URLRequest(url: url)
+        request.timeoutInterval = 180
         if requestOffset > 0 {
             request.addValue("bytes=\(requestOffset)-\(fileLength - 1)", forHTTPHeaderField: "Range")
         }
