@@ -18,14 +18,7 @@ import UIKit
 import MobileCoreServices
 
 protocol CXGMediaPlayerLoaderDelegate {
-    
-    
-    /// 进入加载缓冲状态
-    func loaderWaitingForLoadCache()
-    
-    /// 缓冲足够播放
-    func loaderCacheEnoughToPlay()
-    
+   
     /// 缓存进度
     ///
     /// - Parameter progress: 进度
@@ -74,41 +67,31 @@ extension CXGMediaPlayerLoader: AVAssetResourceLoaderDelegate {
 extension CXGMediaPlayerLoader {
     
     func addLoadingRequest(_ loadingRequest: AVAssetResourceLoadingRequest) {
-       
+        requestList.append(loadingRequest)
+        
+        print("反反复复付付付付付付付付付")
+        
+        
         if self.requestTask != nil {
             if let loadingOffset = loadingRequest.dataRequest?.requestedOffset, let taskCachLength = self.requestTask?.cacheLength, let taskOffset = self.requestTask?.requestOffset {
                 // 判断是否有缓存可供播放,有则回填数据
-                if loadingOffset > taskOffset && loadingOffset - taskOffset < taskCachLength {
-                    if !isCacheEnoughToPlay {
-                        delegate?.loaderCacheEnoughToPlay()
-                        isCacheEnoughToPlay = true
-                    }
-                    requestList.append(loadingRequest)
+                if loadingOffset >= taskOffset && loadingOffset - taskOffset <= taskCachLength {
                     processRequestList()
                 }else {
-                    
                     if isSeekRequired {
-                        requestList.removeAll()
-                        requestList.append(loadingRequest)
                         newTaskWithLoadingRequest(loadingRequest, cache: false)
-                    }else {
-                        if isCacheEnoughToPlay {
-                            delegate?.loaderWaitingForLoadCache()
-                            isCacheEnoughToPlay = false
-                        }
-                        requestList.append(loadingRequest)
                     }
                 }
             }
             
         }else {
-            requestList.removeAll()
-            requestList.append(loadingRequest)
             newTaskWithLoadingRequest(loadingRequest, cache: true)
         }
     }
     
     func newTaskWithLoadingRequest(_ loadingRequest: AVAssetResourceLoadingRequest, cache: Bool) {
+        requestList.removeAll()
+        requestList.append(loadingRequest)
         var fileLength: Int64 = 0;
         if self.requestTask != nil {
             fileLength = self.requestTask?.fileLength ?? 0;
@@ -167,6 +150,10 @@ extension CXGMediaPlayerLoader {
 //        print(task.requestOffset)
         
         /// 在缓存文件取出数据回填(在头开始加载,以及半路加载)
+        guard requestedOffset - task.requestOffset >= 0 else {
+            loadingRequest.finishLoading()
+            return true
+        }
         loadingRequest.dataRequest?.respond(with: CXGMediaPlayerFileHandle.readTempFileData(withOffset: requestedOffset - task.requestOffset, length: respondLength) ?? Data())
         
                 
@@ -188,7 +175,7 @@ extension CXGMediaPlayerLoader: CXGMediaPlayerRequestTaskDelegate {
     
     
     func requestTaskDownloadProgress(_ progress: Float) {
-        if let task = requestTask {
+        if !isSeekRequired, let task = requestTask {
             delegate?.loaderCacheProgress(Float(task.cacheLength + task.requestOffset) / Float(task.fileLength))
         }
     }

@@ -40,20 +40,10 @@ public class CXGMediaPlayer: UIView {
     private var isDragingSlider: Bool = false
     private let playerLoader: CXGMediaPlayerLoader = CXGMediaPlayerLoader()
 
-    private var playState: CXGPlayerState? {
-        
-        willSet {
-            
-        }
-        
-        didSet {
-            if playState == .buffering {
-                mask_View.activity.startAnimating()
-            }else {
-                mask_View.activity.stopAnimating()
-            }
-        }
-    }
+    private var playState: CXGPlayerState = .pause
+    
+    /// 是否加载本地
+    private var isCacheFile: Bool = false
     
     public override init(frame: CGRect) {
         super.init(frame: frame)
@@ -87,6 +77,7 @@ public class CXGMediaPlayer: UIView {
         if let path = CXGMediaPlayerFileHandle.cacheFilePath(withURL: url) {
             self.playerItem = AVPlayerItem(url: URL(fileURLWithPath: path))
             playerItem?.addObserver(self, forKeyPath: "loadedTimeRanges", options: .new, context: nil)
+            isCacheFile = true
         } else {
             var urlComponents = URLComponents(url: url, resolvingAgainstBaseURL: false)
             urlComponents?.scheme = "streaming"
@@ -96,6 +87,7 @@ public class CXGMediaPlayer: UIView {
             let asset = AVURLAsset(url: url, options: nil)
             asset.resourceLoader.setDelegate(playerLoader, queue: DispatchQueue.main)
             self.playerItem = AVPlayerItem(asset: asset)
+            isCacheFile = false
         }
         
         player.replaceCurrentItem(with: playerItem)
@@ -161,9 +153,10 @@ public class CXGMediaPlayer: UIView {
                     if totalTime > 0 {
                         self.mask_View.totalTimeLabel.text = String(format: "%02d:%02d", Int(totalTime) / 60, Int(totalTime) % 60)
                     }
-                    player.play()
-                    self.playState = .playing
-                    mask_View.playBtn.isSelected = true
+                    playState = .playing
+                    if isCacheFile {
+                        play()
+                    }
                 case .failed:
                     playState = .failed
                     print("load error")
@@ -179,7 +172,10 @@ public class CXGMediaPlayer: UIView {
                     let durationTime = CMTimeGetSeconds(timeRange.duration)
                     let loadedTime = startTime + durationTime
                     let totalTime = CMTimeGetSeconds(item.duration)
-                    self.mask_View.progressView.setProgress(Float(loadedTime / totalTime), animated: true)
+                    self.mask_View.progressView.setProgress(Float(loadedTime) / Float(totalTime), animated: true)
+                    if playState == .playing && Float(loadedTime) / Float(totalTime) > self.mask_View.videoSlider.value + 0.01 {
+                        play()
+                    }
                 }
             }
             
@@ -197,13 +193,27 @@ public class CXGMediaPlayer: UIView {
     @objc private func playOrPauseAction(_ sender: UIButton) {
         sender.isSelected = !sender.isSelected
         if sender.isSelected {
-            player.play()
-            playState = .playing
+            play()
         }else {
-            player.pause()
-            playState = .pause
+            pause()
         }
     }
+    
+    func play() {
+        player.play()
+        playState = .playing
+        mask_View.playBtn.isSelected = true
+        mask_View.activity.stopAnimating()
+    }
+    
+    func pause() {
+        player.pause()
+        playState = .pause
+        mask_View.playBtn.isSelected = false
+    }
+    
+    
+    
     
     // 进入全屏
     @objc private func enterFullScreen(_ sender: UIButton) {
@@ -239,11 +249,12 @@ public class CXGMediaPlayer: UIView {
         if let item = self.playerItem {
             let currentTime = Float(CMTimeGetSeconds(item.duration)) * sender.value
             player.pause()
-            
+            mask_View.activity.startAnimating()
+            self.playerLoader.isSeekRequired = true
             player.seek(to: CMTime(seconds: Double(currentTime), preferredTimescale: 1)) { (finish) in
-                self.player.play()
-                self.playState = .playing
-                self.playerLoader.isSeekRequired = true
+                if self.isCacheFile {
+                    self.play()
+                }
             }
         }
         isDragingSlider = false
@@ -275,7 +286,7 @@ public class CXGMediaPlayer: UIView {
     ///
     /// - Parameter notification: 通知消息
     @objc private func appDidBecomeActive(_ notification: Notification) {
-        if let state = playState, state == .playing {
+        if playState == .playing {
             player.play()
         }
     }
@@ -313,20 +324,12 @@ public class CXGMediaPlayer: UIView {
 }
 
 extension CXGMediaPlayer: CXGMediaPlayerLoaderDelegate {
-    func loaderWaitingForLoadCache() {
-//        self.playState = .buffering
-//        player.pause()
-        mask_View.playBtn.isSelected = false
-    }
-    
-    func loaderCacheEnoughToPlay() {
-        self.player.play()
-        self.playState = .playing
-        mask_View.playBtn.isSelected = true
-    }
     
     func loaderCacheProgress(_ progress: Float) {
         self.mask_View.progressView.setProgress(progress, animated: true)
+        if playState == .playing && progress > self.mask_View.videoSlider.value {
+            play()
+        }
     }
     
     func loaderRequestFailWithError(_ error: Error) {

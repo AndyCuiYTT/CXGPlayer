@@ -19,8 +19,9 @@ class ViewController: UIViewController {
         
 //        player.setVideoUrl("https://media.w3.org/2010/05/bunny/movie.mp4")
 
-        player.setVideoUrl("https://media.w3.org/2010/04/html5-meetup-paris-avril-2010.mp4")
+//        player.setVideoUrl("https://media.w3.org/2010/04/html5-meetup-paris-avril-2010.mp4")
 //        player.setVideoUrl("http://download.lingyongqian.cn/music/AdagioSostenuto.mp3")
+        player.setVideoUrl("http://video.qiuwenxinli.com/tsjszibeiyuchaoyue.mp4?e=1557470552&token=cA5ED2E4upQ99lBkEsMGdnFwGjb-_3ooO1GgRfe5:8yKF32_3gRgfqobc2ktyb9CLhjE=")
         
         self.view.addSubview(player)
         
