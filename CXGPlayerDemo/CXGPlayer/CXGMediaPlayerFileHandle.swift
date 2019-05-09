@@ -79,6 +79,20 @@ class CXGMediaPlayerFileHandle: NSObject {
         return nil
     }
    
+    /// 清除缓存
+    ///
+    /// - Returns: 是否清除成功
+    class func clearCache() -> Bool {
+        if let cachePath = cacheFolderPath {
+            do {
+                try FileManager.default.removeItem(atPath: cachePath)
+                return true
+            }catch {
+                print(error)
+            }
+        }
+        return false        
+    }
     
 }
 

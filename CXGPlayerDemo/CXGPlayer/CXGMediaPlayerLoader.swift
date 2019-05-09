@@ -68,10 +68,7 @@ extension CXGMediaPlayerLoader {
     
     func addLoadingRequest(_ loadingRequest: AVAssetResourceLoadingRequest) {
         requestList.append(loadingRequest)
-        
-        print("反反复复付付付付付付付付付")
-        
-        
+    
         if self.requestTask != nil {
             if let loadingOffset = loadingRequest.dataRequest?.requestedOffset, let taskCachLength = self.requestTask?.cacheLength, let taskOffset = self.requestTask?.requestOffset {
                 // 判断是否有缓存可供播放,有则回填数据
@@ -175,7 +172,7 @@ extension CXGMediaPlayerLoader: CXGMediaPlayerRequestTaskDelegate {
     
     
     func requestTaskDownloadProgress(_ progress: Float) {
-        if !isSeekRequired, let task = requestTask {
+        if let task = requestTask {
             delegate?.loaderCacheProgress(Float(task.cacheLength + task.requestOffset) / Float(task.fileLength))
         }
     }

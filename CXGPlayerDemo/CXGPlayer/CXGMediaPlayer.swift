@@ -45,21 +45,37 @@ public class CXGMediaPlayer: UIView {
     /// 是否加载本地
     private var isCacheFile: Bool = false
     
+    private var timer: Timer?
+    
     public override init(frame: CGRect) {
         super.init(frame: frame)
         smallFrame = frame
         playerLoader.delegate = self
         playerLayer = AVPlayerLayer(player: player)
-        playerLayer.videoGravity = .resizeAspectFill
+        playerLayer.videoGravity = .resizeAspect
         self.layer.insertSublayer(playerLayer, at: 0)
         
         mask_View = CXGMediaPlayerMaskView(frame: CGRect(x: 0, y: 0, width: frame.width, height: frame.height))
         self.addSubview(mask_View)
         
+        timer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(observeCache), userInfo: nil, repeats: true)
+        
         addTargets()
         addNotifications()
         setProgressOfPlayTime()
     }
+    
+    
+    @objc func observeCache() {
+        if playState == .buffering && mask_View.progressView.progress >= self.mask_View.videoSlider.value {
+            play()
+        }else if playState == .playing && mask_View.progressView.progress < self.mask_View.videoSlider.value {
+            playState = .buffering
+            mask_View.activity.startAnimating()
+        }
+    }
+    
+    
     
     public func setVideoUrl(_ urlStr: String) {
         playerItem?.removeObserver(self, forKeyPath: "status")
@@ -153,7 +169,7 @@ public class CXGMediaPlayer: UIView {
                     if totalTime > 0 {
                         self.mask_View.totalTimeLabel.text = String(format: "%02d:%02d", Int(totalTime) / 60, Int(totalTime) % 60)
                     }
-                    playState = .playing
+                    playState = .buffering
                     if isCacheFile {
                         play()
                     }
@@ -249,6 +265,7 @@ public class CXGMediaPlayer: UIView {
         if let item = self.playerItem {
             let currentTime = Float(CMTimeGetSeconds(item.duration)) * sender.value
             player.pause()
+            playState = .buffering
             mask_View.activity.startAnimating()
             self.playerLoader.isSeekRequired = true
             player.seek(to: CMTime(seconds: Double(currentTime), preferredTimescale: 1)) { (finish) in
@@ -327,9 +344,7 @@ extension CXGMediaPlayer: CXGMediaPlayerLoaderDelegate {
     
     func loaderCacheProgress(_ progress: Float) {
         self.mask_View.progressView.setProgress(progress, animated: true)
-        if playState == .playing && progress > self.mask_View.videoSlider.value {
-            play()
-        }
+
     }
     
     func loaderRequestFailWithError(_ error: Error) {
