@@ -94,6 +94,25 @@ class CXGMediaPlayerFileHandle: NSObject {
         return false        
     }
     
+    /// 清除缓存
+    ///
+    /// - Returns: 是否清除成功
+    class func clearCacheWithURL(_ url: URL) -> Bool {
+        
+        if let cachePath = cacheFolderPath, let fileName = url.path.components(separatedBy: "/").last {
+            let filePath = cachePath.appending("/\(fileName)")
+            do {
+                try FileManager.default.removeItem(atPath: filePath)
+                return true
+            }catch {
+                print(error)
+            }
+        }
+        return false
+    }
+    
+    
+    
 }
 
 // MARK: - 缓存文件路径

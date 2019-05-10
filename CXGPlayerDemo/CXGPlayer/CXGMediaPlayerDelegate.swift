@@ -8,8 +8,6 @@
 
 import UIKit
 
-
-
 protocol CXGMediaPlayerDelegate: class {
     func loadMediaFailed()
 }

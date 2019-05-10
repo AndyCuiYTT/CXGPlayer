@@ -338,7 +338,6 @@ public class CXGMediaPlayer: UIView {
 extension CXGMediaPlayer: CXGMediaPlayerLoaderDelegate {
     
     func loaderCacheProgress(_ progress: Float) {
-//        self.mask_View.progressView.setProgress(progress, animated: true)
     }
     
     func loaderRequestFailWithError(_ error: Error) {
