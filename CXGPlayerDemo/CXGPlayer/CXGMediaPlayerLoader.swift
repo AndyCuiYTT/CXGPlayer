@@ -17,28 +17,12 @@
 import UIKit
 import MobileCoreServices
 
-protocol CXGMediaPlayerLoaderDelegate {
-   
-    /// 缓存进度
-    ///
-    /// - Parameter progress: 进度
-    func loaderCacheProgress(_ progress: Float)
-    
-    /// 视频加载失败
-    ///
-    /// - Parameter error: 失败原因
-    func loaderRequestFailWithError(_ error: Error)
-    
-    
-}
 
 class CXGMediaPlayerLoader: NSObject {
     
     private var requestList: [AVAssetResourceLoadingRequest] = []
     
     private var requestTask: CXGMediaPlayerRequestTask?
-    
-    var delegate: CXGMediaPlayerLoaderDelegate?
     
     private var isCacheEnoughToPlay: Bool = false
     
@@ -170,20 +154,17 @@ extension CXGMediaPlayerLoader: CXGMediaPlayerRequestTaskDelegate {
         
     }
     
-    
     func requestTaskDownloadProgress(_ progress: Float) {
-        if let task = requestTask {
-            delegate?.loaderCacheProgress(Float(task.cacheLength + task.requestOffset) / Float(task.fileLength))
-        }
-    }
-    
-    func requestTaskDidUpdateCache() {
-        processRequestList()
+        
     }
     
     func requestTaskDidFailWithError(_ error: Error) {
-        delegate?.loaderRequestFailWithError(error)
+        
     }
     
+   
+    func requestTaskDidUpdateCache() {
+        processRequestList()
+    }
     
 }
