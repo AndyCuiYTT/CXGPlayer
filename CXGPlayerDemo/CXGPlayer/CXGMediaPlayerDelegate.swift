@@ -48,6 +48,13 @@ public protocol CXGMediaPlayerDelegate: class {
     ///   - progress: 加载进度
     func mediaPlayer(_ player: CXGMediaPlayer, loadProgress progress: Float)
     
+    /// 视频显示屏幕
+    ///
+    /// - Parameters:
+    ///   - player: 播放器
+    ///   - layer: 视频显示屏幕
+    func mediaPlayer(_ player: CXGMediaPlayer, playerLayer layer:  AVPlayerLayer)
+    
     /// 播放进度
     ///
     /// - Parameters:

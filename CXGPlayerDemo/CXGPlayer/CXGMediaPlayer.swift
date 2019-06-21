@@ -28,7 +28,6 @@ public class CXGMediaPlayer: NSObject {
     
     private let player: AVPlayer = AVPlayer()
     private var playerItem: AVPlayerItem?
-    var playerLayer: AVPlayerLayer?
     private var mask_View: CXGMediaPlayerMaskView!
 
     private let playerLoader: CXGMediaPlayerLoader = CXGMediaPlayerLoader()
@@ -44,23 +43,23 @@ public class CXGMediaPlayer: NSObject {
     
    
     
-    init(_ isNeedPlayerLayer: Bool = true) {
+    override init() {
         super.init()
-        if isNeedPlayerLayer {
-            playerLayer = AVPlayerLayer(player: player)
-            playerLayer?.videoGravity = .resizeAspect
-        }
+        
+        let playerLayer = AVPlayerLayer(player: player)
+        playerLayer.videoGravity = .resizeAspect
+        delegate?.mediaPlayer(self, playerLayer: playerLayer)
+        
         setProgressOfPlayTime()
     }
     
     
-    
-    public func setVideoUrl(_ urlStr: String) {
+    func play(withVideoURL urlStr: String) {
         playerItem?.removeObserver(self, forKeyPath: "status")
         playerItem?.removeObserver(self, forKeyPath: "loadedTimeRanges")
         playerItem?.removeObserver(self, forKeyPath: "playbackBufferEmpty")
         playerItem?.removeObserver(self, forKeyPath: "playbackLikelyToKeepUp")
-
+        
         NotificationCenter.default.removeObserver(self, name: .AVPlayerItemDidPlayToEndTime, object: playerItem)
         playerItem = nil
         
@@ -91,10 +90,20 @@ public class CXGMediaPlayer: NSObject {
         NotificationCenter.default.addObserver(self, selector: #selector(videoPlayDidEnd(_:)), name: .AVPlayerItemDidPlayToEndTime, object: playerItem)
         playerItem?.addObserver(self, forKeyPath: "status", options: .new, context: nil)
         playerItem?.addObserver(self, forKeyPath: "loadedTimeRanges", options: .new, context: nil)
-        
     }
- 
     
+    func play() {
+        player.play()
+        playState = .playing
+    }
+    
+    
+    func pause(_ isChangeStatus: Bool = true) {
+        player.pause()
+        if isChangeStatus {
+            playState = .pause
+        }
+    }
     
     
     /// 设置进度条与时间
@@ -167,17 +176,8 @@ public class CXGMediaPlayer: NSObject {
     
     
     
-    func play() {
-        player.play()
-        playState = .playing
-    }
+   
     
-    func pause(_ isChangeStatus: Bool = true) {
-        player.pause()
-        if isChangeStatus {
-            playState = .pause
-        }
-    }
     
     
     /// 滑动快进
@@ -192,11 +192,6 @@ public class CXGMediaPlayer: NSObject {
     }
     
     
-    public func resetPlayerLayerFrame(_ frame: CGRect) {
-        playerLayer?.frame = frame
-    }
-    
-    
     
     
     
@@ -206,15 +201,11 @@ public class CXGMediaPlayer: NSObject {
     @objc private func videoPlayDidEnd(_ notification: Notification) {
         
         player.seek(to: CMTime(value: 0, timescale: 1)) { [weak self] (finish) in
-//            self.mask_View.videoSlider.setValue(0, animated: true)
-//            self.mask_View.currentTimeLabel.text = "00:00"
             if let sSelf = self {
                 sSelf.delegate?.mediaPlayerEnd(sSelf)
             }
         }
-        playState = .stopped
-//        mask_View.playBtn.isSelected = false
-        
+        playState = .stopped        
     }
 
     deinit {

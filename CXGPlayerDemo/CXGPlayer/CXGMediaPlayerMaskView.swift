@@ -122,9 +122,9 @@ class CXGMediaPlayerMaskView: UIView {
 //        self.addSubview(volumeProgress)
         self.addSubview(activity)
         
-        if let lay = player.playerLayer {
-            self.layer.insertSublayer(lay, at: 0)
-        }
+//        if let lay = player.playerLayer {
+//            self.layer.insertSublayer(lay, at: 0)
+//        }
         
         
     }
@@ -173,7 +173,7 @@ class CXGMediaPlayerMaskView: UIView {
         activity.frame = CGRect(x: width / 2 - 25, y: height / 2 - 25, width: 50, height: 50)
 //        volumeProgress.center = CGPoint(x: 40, y: height / 2)
         
-        player.resetPlayerLayerFrame(self.bounds)
+//        player.resetPlayerLayerFrame(self.bounds)
         
     }
     
