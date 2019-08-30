@@ -7,10 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		7003C9C1227E74A00027253A /* CXGMediaPlayerLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7003C9C0227E74A00027253A /* CXGMediaPlayerLoader.swift */; };
+		4B5D628723190D6800225CFB /* CXGMediaPlayerFileHandle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B5D628423190D6800225CFB /* CXGMediaPlayerFileHandle.swift */; };
+		4B5D628823190D6800225CFB /* CXGMediaPlayerLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B5D628523190D6800225CFB /* CXGMediaPlayerLoader.swift */; };
+		4B5D628923190D6800225CFB /* CXGMediaPlayerRequestTask.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B5D628623190D6800225CFB /* CXGMediaPlayerRequestTask.swift */; };
 		7003C9C3227E79240027253A /* CXGMediaPlayerDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7003C9C2227E79240027253A /* CXGMediaPlayerDelegate.swift */; };
-		7003C9C5227E7D9B0027253A /* CXGMediaPlayerRequestTask.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7003C9C4227E7D9B0027253A /* CXGMediaPlayerRequestTask.swift */; };
-		7003C9C7227E7EC10027253A /* CXGMediaPlayerFileHandle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7003C9C6227E7EC10027253A /* CXGMediaPlayerFileHandle.swift */; };
 		7003C9CF227E823E0027253A /* CXGPlayerDemoTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7003C9CE227E823E0027253A /* CXGPlayerDemoTests.swift */; };
 		70419CE2221CEF4B00E12011 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70419CE1221CEF4B00E12011 /* AppDelegate.swift */; };
 		70419CE4221CEF4B00E12011 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70419CE3221CEF4B00E12011 /* ViewController.swift */; };
@@ -40,10 +40,10 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		7003C9C0227E74A00027253A /* CXGMediaPlayerLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CXGMediaPlayerLoader.swift; sourceTree = "<group>"; };
+		4B5D628423190D6800225CFB /* CXGMediaPlayerFileHandle.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CXGMediaPlayerFileHandle.swift; sourceTree = "<group>"; };
+		4B5D628523190D6800225CFB /* CXGMediaPlayerLoader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CXGMediaPlayerLoader.swift; sourceTree = "<group>"; };
+		4B5D628623190D6800225CFB /* CXGMediaPlayerRequestTask.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CXGMediaPlayerRequestTask.swift; sourceTree = "<group>"; };
 		7003C9C2227E79240027253A /* CXGMediaPlayerDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CXGMediaPlayerDelegate.swift; sourceTree = "<group>"; };
-		7003C9C4227E7D9B0027253A /* CXGMediaPlayerRequestTask.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CXGMediaPlayerRequestTask.swift; sourceTree = "<group>"; };
-		7003C9C6227E7EC10027253A /* CXGMediaPlayerFileHandle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CXGMediaPlayerFileHandle.swift; sourceTree = "<group>"; };
 		7003C9CC227E823E0027253A /* CXGPlayerDemoTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = CXGPlayerDemoTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		7003C9CE227E823E0027253A /* CXGPlayerDemoTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CXGPlayerDemoTests.swift; sourceTree = "<group>"; };
 		7003C9D0227E823E0027253A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -136,10 +136,10 @@
 				70419D08221D4FC400E12011 /* CXGMediaPlayerTools.h */,
 				70419D09221D4FC400E12011 /* CXGMediaPlayerTools.m */,
 				70419D07221D4FC400E12011 /* CXGPlayerDemo-Bridging-Header.h */,
-				7003C9C0227E74A00027253A /* CXGMediaPlayerLoader.swift */,
 				7003C9C2227E79240027253A /* CXGMediaPlayerDelegate.swift */,
-				7003C9C4227E7D9B0027253A /* CXGMediaPlayerRequestTask.swift */,
-				7003C9C6227E7EC10027253A /* CXGMediaPlayerFileHandle.swift */,
+				4B5D628423190D6800225CFB /* CXGMediaPlayerFileHandle.swift */,
+				4B5D628523190D6800225CFB /* CXGMediaPlayerLoader.swift */,
+				4B5D628623190D6800225CFB /* CXGMediaPlayerRequestTask.swift */,
 			);
 			path = CXGPlayer;
 			sourceTree = "<group>";
@@ -278,12 +278,12 @@
 			files = (
 				70419D06221CF49800E12011 /* CXGMediaPlayerMaskView.swift in Sources */,
 				7003C9C3227E79240027253A /* CXGMediaPlayerDelegate.swift in Sources */,
+				4B5D628723190D6800225CFB /* CXGMediaPlayerFileHandle.swift in Sources */,
+				4B5D628923190D6800225CFB /* CXGMediaPlayerRequestTask.swift in Sources */,
+				4B5D628823190D6800225CFB /* CXGMediaPlayerLoader.swift in Sources */,
 				70419CE4221CEF4B00E12011 /* ViewController.swift in Sources */,
 				70419D04221CF08600E12011 /* CXGMediaPlayer.swift in Sources */,
-				7003C9C1227E74A00027253A /* CXGMediaPlayerLoader.swift in Sources */,
-				7003C9C5227E7D9B0027253A /* CXGMediaPlayerRequestTask.swift in Sources */,
 				70419CE2221CEF4B00E12011 /* AppDelegate.swift in Sources */,
-				7003C9C7227E7EC10027253A /* CXGMediaPlayerFileHandle.swift in Sources */,
 				70419D0A221D4FC400E12011 /* CXGMediaPlayerTools.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

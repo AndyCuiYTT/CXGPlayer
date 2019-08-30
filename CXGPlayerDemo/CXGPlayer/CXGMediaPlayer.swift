@@ -41,14 +41,19 @@ public class CXGMediaPlayer: NSObject {
     
     private var timeObserver: Any?
     
+    var playerlayer: AVPlayerLayer?
+    
+    
    
     
     override init() {
         super.init()
         
-        let playerLayer = AVPlayerLayer(player: player)
-        playerLayer.videoGravity = .resizeAspect
-        delegate?.mediaPlayer(self, playerLayer: playerLayer)
+        playerlayer = AVPlayerLayer(player: player)
+        playerlayer?.videoGravity = .resizeAspect
+        
+//        delegate?.mediaPlayer(self, playerLayer: layer!)
+
         
         setProgressOfPlayTime()
     }

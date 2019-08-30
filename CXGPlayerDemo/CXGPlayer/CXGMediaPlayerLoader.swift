@@ -60,17 +60,19 @@ extension CXGMediaPlayerLoader {
                     processRequestList()
                 }else {
                     if isSeekRequired {
-                        newTaskWithLoadingRequest(loadingRequest, cache: false)
+                        newTaskWithLoadingRequest(loadingRequest)
+                    }else {
+                        processRequestList()
                     }
                 }
             }
             
         }else {
-            newTaskWithLoadingRequest(loadingRequest, cache: true)
+            newTaskWithLoadingRequest(loadingRequest)
         }
     }
     
-    func newTaskWithLoadingRequest(_ loadingRequest: AVAssetResourceLoadingRequest, cache: Bool) {
+    func newTaskWithLoadingRequest(_ loadingRequest: AVAssetResourceLoadingRequest) {
         requestList.removeAll()
         requestList.append(loadingRequest)
         var fileLength: Int64 = 0;
@@ -82,7 +84,6 @@ extension CXGMediaPlayerLoader {
         self.requestTask?.requestURL = loadingRequest.request.url
         self.requestTask?.requestOffset = loadingRequest.dataRequest?.requestedOffset ?? 0;
         self.requestTask?.cacheLength = 0
-        self.requestTask?.cache = cache;
         if (fileLength > 0) {
             self.requestTask?.fileLength = Int64(fileLength);
         }
@@ -94,7 +95,6 @@ extension CXGMediaPlayerLoader {
     
     func processRequestList() {
         for loadingRequest in self.requestList {
-            
             if finishLoadingWithLoadingRequest(loadingRequest) {
                 if let index = requestList.firstIndex(of: loadingRequest) {
                     requestList.remove(at: index)
@@ -106,46 +106,50 @@ extension CXGMediaPlayerLoader {
     
     func finishLoadingWithLoadingRequest(_ loadingRequest: AVAssetResourceLoadingRequest) -> Bool {
         //填充信息
+
+        guard let taskRequest = requestTask else { return false}
         
         loadingRequest.contentInformationRequest?.contentType = "video/mp4"
-        loadingRequest.contentInformationRequest?.isByteRangeAccessSupported = true;
+        loadingRequest.contentInformationRequest?.isByteRangeAccessSupported = true; // 是否支持分段加载
         loadingRequest.contentInformationRequest?.contentLength = self.requestTask?.fileLength ?? 0;
         
-        
-        guard let task = requestTask else { return false}
-        
-        guard let dataRequest = loadingRequest.dataRequest else { return false }
+        guard let assetLoadingRequest = loadingRequest.dataRequest else { return false }
         
         //读文件，填充数据
-        let cacheLength = task.cacheLength
-        var requestedOffset: Int64 = dataRequest.requestedOffset
-        if dataRequest.currentOffset != 0 {
-            requestedOffset = dataRequest.currentOffset
+        let cacheLength = taskRequest.cacheLength // 已经缓存数据长度
+        let taskRequestOffset = taskRequest.requestOffset // 加载，缓存初始位置
+        
+        
+        var assetLoadingRequestOffset = assetLoadingRequest.requestedOffset // 本次加载数据偏移
+        let assetLoadingRequestLength = assetLoadingRequest.requestedLength // 本次加载数据长度
+        
+        if assetLoadingRequest.currentOffset != 0 {
+            assetLoadingRequestOffset = assetLoadingRequest.currentOffset // 当前请求偏移
         }
-        let canReadLength = cacheLength - requestedOffset
-        
-        let respondLength = Int(canReadLength) < dataRequest.requestedLength ? Int(canReadLength) :  dataRequest.requestedLength
-        
-//        print("cacheLength \(cacheLength), requestedOffset \(requestedOffset), currentOffset \(dataRequest.currentOffset), canReadLength \(canReadLength), requestedLength \(dataRequest.requestedLength)");
-        
-//        print(task.requestOffset)
-        
-        /// 在缓存文件取出数据回填(在头开始加载,以及半路加载)
-        guard requestedOffset - task.requestOffset >= 0 else {
-            loadingRequest.finishLoading()
-            return true
-        }
-        loadingRequest.dataRequest?.respond(with: CXGMediaPlayerFileHandle.readTempFileData(withOffset: requestedOffset - task.requestOffset, length: respondLength) ?? Data())
-        
+        if assetLoadingRequestOffset >= taskRequestOffset {
+            var canReadLength = cacheLength + taskRequestOffset - assetLoadingRequestOffset
+            if canReadLength < 0 {
+//                newTaskWithLoadingRequest(loadingRequest)
+                return false
+            }else {
+                if canReadLength > assetLoadingRequestLength {
+                    canReadLength = Int64(assetLoadingRequestLength)
+                }
                 
-        //如果完全响应了所需要的数据，则完成
-        let nowendOffset = requestedOffset + canReadLength;
-        let reqEndOffset = dataRequest.requestedOffset + Int64(dataRequest.requestedLength);
-        if (nowendOffset >= reqEndOffset) {
-            loadingRequest.finishLoading()
-            return true
+               
+                loadingRequest.dataRequest?.respond(with:  CXGMediaPlayerFileHandle.readTempFileData(withURL: taskRequest.requestURL!, offset: assetLoadingRequestOffset - taskRequestOffset, length: assetLoadingRequestLength) ?? Data())
+                print( CXGMediaPlayerFileHandle.readTempFileData(withURL: taskRequest.requestURL!, offset: assetLoadingRequestOffset - taskRequestOffset, length: assetLoadingRequestLength))
+                 //如果完全响应了所需要的数据，则完成
+                if assetLoadingRequestOffset + canReadLength >= assetLoadingRequestOffset + Int64(assetLoadingRequestLength) {
+                    loadingRequest.finishLoading()
+                    return true
+                }
+                return false
+            }
+        }else {
+//            newTaskWithLoadingRequest(loadingRequest)
+            return false
         }
-        return false
     }
 }
 
@@ -155,7 +159,7 @@ extension CXGMediaPlayerLoader: CXGMediaPlayerRequestTaskDelegate {
     }
     
     func requestTaskDownloadProgress(_ progress: Float) {
-        
+        processRequestList()
     }
     
     func requestTaskDidFailWithError(_ error: Error) {

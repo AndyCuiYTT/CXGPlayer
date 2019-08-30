@@ -23,6 +23,10 @@ class ViewController: UIViewController {
 //        player.setVideoUrl("http://download.lingyongqian.cn/music/AdagioSostenuto.mp3")
 //        player.player.setVideoUrl("http://video.qiuwenxinli.com/SHKfmzh12.mp4?e=1557888353&token=cA5ED2E4upQ99lBkEsMGdnFwGjb-_3ooO1GgRfe5:eH-24eZxpkoUS7IgU-MlQNxbTto=")
         
+        player.player.play(withVideoURL: "https://media.w3.org/2010/04/html5-meetup-paris-avril-2010.mp4")
+        
+        // http://audio.qiuwenxinli.com/tuishujianshu19qinmiguanxi.mp3
+        
         self.view.addSubview(player)
         
         

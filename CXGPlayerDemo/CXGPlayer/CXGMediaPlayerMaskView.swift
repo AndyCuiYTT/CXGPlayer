@@ -122,9 +122,9 @@ class CXGMediaPlayerMaskView: UIView {
 //        self.addSubview(volumeProgress)
         self.addSubview(activity)
         
-//        if let lay = player.playerLayer {
-//            self.layer.insertSublayer(lay, at: 0)
-//        }
+        if let lay = player.playerlayer {
+            self.layer.insertSublayer(lay, at: 0)
+        }
         
         
     }
