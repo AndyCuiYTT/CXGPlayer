@@ -67,8 +67,6 @@ class CXGMediaPlayerRequestTask: NSObject {
         request.timeoutInterval = 180
         if requestOffset > 0 {
             request.addValue("bytes=\(requestOffset)-\(fileLength - 1)", forHTTPHeaderField: "Range")
-        }else {
-            isNeedCache = true
         }
         dataTask = session?.dataTask(with: request)
         dataTask?.resume()

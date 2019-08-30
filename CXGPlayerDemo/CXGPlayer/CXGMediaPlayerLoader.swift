@@ -27,10 +27,15 @@ class CXGMediaPlayerLoader: NSObject {
     private var isCacheEnoughToPlay: Bool = false
     
     var isSeekRequired: Bool = false
-
+    
 }
 
 extension CXGMediaPlayerLoader: AVAssetResourceLoaderDelegate {
+    
+    func setCancel() {
+        requestTask?.setCancel()
+        requestList.removeAll()
+    }
     
     /// 要求加载资源的代理方法
     func resourceLoader(_ resourceLoader: AVAssetResourceLoader, shouldWaitForLoadingOfRequestedResource loadingRequest: AVAssetResourceLoadingRequest) -> Bool {
@@ -44,8 +49,6 @@ extension CXGMediaPlayerLoader: AVAssetResourceLoaderDelegate {
             requestList.remove(at: index)
         }
     }
-    
-    
 }
 
 extension CXGMediaPlayerLoader {
@@ -60,7 +63,7 @@ extension CXGMediaPlayerLoader {
                     processRequestList()
                 }else {
                     if isSeekRequired {
-                        newTaskWithLoadingRequest(loadingRequest)
+                        newTaskWithLoadingRequest(loadingRequest, isNeedCache: false)
                     }else {
                         processRequestList()
                     }
@@ -68,11 +71,11 @@ extension CXGMediaPlayerLoader {
             }
             
         }else {
-            newTaskWithLoadingRequest(loadingRequest)
+            newTaskWithLoadingRequest(loadingRequest, isNeedCache: true)
         }
     }
     
-    func newTaskWithLoadingRequest(_ loadingRequest: AVAssetResourceLoadingRequest) {
+    func newTaskWithLoadingRequest(_ loadingRequest: AVAssetResourceLoadingRequest, isNeedCache: Bool) {
         requestList.removeAll()
         requestList.append(loadingRequest)
         var fileLength: Int64 = 0;
@@ -84,6 +87,7 @@ extension CXGMediaPlayerLoader {
         self.requestTask?.requestURL = loadingRequest.request.url
         self.requestTask?.requestOffset = loadingRequest.dataRequest?.requestedOffset ?? 0;
         self.requestTask?.cacheLength = 0
+        self.requestTask?.isNeedCache = isNeedCache
         if (fileLength > 0) {
             self.requestTask?.fileLength = Int64(fileLength);
         }
@@ -101,7 +105,6 @@ extension CXGMediaPlayerLoader {
                 }
             }
         }
-        
     }
     
     func finishLoadingWithLoadingRequest(_ loadingRequest: AVAssetResourceLoadingRequest) -> Bool {
@@ -138,7 +141,6 @@ extension CXGMediaPlayerLoader {
                 
                
                 loadingRequest.dataRequest?.respond(with:  CXGMediaPlayerFileHandle.readTempFileData(withURL: taskRequest.requestURL!, offset: assetLoadingRequestOffset - taskRequestOffset, length: assetLoadingRequestLength) ?? Data())
-                print( CXGMediaPlayerFileHandle.readTempFileData(withURL: taskRequest.requestURL!, offset: assetLoadingRequestOffset - taskRequestOffset, length: assetLoadingRequestLength))
                  //如果完全响应了所需要的数据，则完成
                 if assetLoadingRequestOffset + canReadLength >= assetLoadingRequestOffset + Int64(assetLoadingRequestLength) {
                     loadingRequest.finishLoading()
@@ -151,6 +153,8 @@ extension CXGMediaPlayerLoader {
             return false
         }
     }
+    
+   
 }
 
 extension CXGMediaPlayerLoader: CXGMediaPlayerRequestTaskDelegate {

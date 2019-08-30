@@ -60,6 +60,7 @@ public class CXGMediaPlayer: NSObject {
     
     
     func play(withVideoURL urlStr: String) {
+        self.playerLoader.setCancel()
         playerItem?.removeObserver(self, forKeyPath: "status")
         playerItem?.removeObserver(self, forKeyPath: "loadedTimeRanges")
         playerItem?.removeObserver(self, forKeyPath: "playbackBufferEmpty")
